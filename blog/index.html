@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DateCalc Blog - Articles & Insights</title>
+  <meta name="description" content="Read articles and insights on time, calendars, and productivity tips on the official DateCalc blog." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Inter font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    
+    /* Apply Inter font to all elements */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Define custom accent colors for light and dark modes */
+    .accent-rose { color: #EEAECA; }
+    .bg-accent-rose { background-color: #EEAECA; }
+    .border-accent-rose { border-color: #EEAECA; }
+    .hover-bg-accent-rose:hover { background-color: #EEAECA; }
+    .text-gray-950 .accent-rose { color: #F5DDE7; } /* Lighter for dark mode */
+
+    /* Transition classes for smooth theme changes */
+    .bg-white, .text-gray-800, .bg-gray-950, .text-gray-100, .border-gray-200, .border-gray-800, .bg-gray-50, .bg-gray-900, .bg-gray-100, .bg-gray-800 {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Article content visibility transition */
+    .article-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .article-section.is-visible {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Styling for the main content within the article */
+    .prose h1, .prose h2, .prose h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1.25em;
+      line-height: 1.75;
+    }
+    .prose a {
+      color: #EEAECA;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 transition-colors">
+  
+  <!-- Main Content Area -->
+  <main class="min-h-screen">
+    <!-- Back Button & Theme Toggle -->
+    <div class="sticky top-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-800">
+      <a href="index.html" class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Main Site
+      </a>
+      <button id="theme-toggle-btn" 
+              onclick="toggleTheme()" 
+              class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
+                     bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 
+                     hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center gap-2">
+        🌙 Dark Mode
+      </button>
+    </div>
+
+    <!-- Blog Posts List Section -->
+    <section id="blog-list" class="max-w-6xl mx-auto px-4 py-10 md:py-16">
+      <div class="text-center mb-10">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+          DateCalc <span class="accent-rose">Blog</span>
+        </h1>
+        <p class="mt-4 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Read our latest articles on time, dates, and productivity tips.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Blog Post 1 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=History+of+Leap+Years" alt="A calendar showing the 29th of February.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">History</span>
+            <h3 class="text-xl font-bold mb-2">The Fascinating History of Leap Years</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Explore why we add an extra day to February every four years and the cultural impact of this tradition.
+            </p>
+            <button onclick="showArticle('article-1')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Blog Post 2 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=The+Gregorian+Calendar" alt="A globe with a clock face.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">General Knowledge</span>
+            <h3 class="text-xl font-bold mb-2">How the Gregorian Calendar Shaped the Modern World</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Dive into the history of our modern calendar and its role in standardizing global time.
+            </p>
+            <button onclick="showArticle('article-2')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Blog Post 3 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=Psychology+of+Time" alt="A person watching a clock.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Science</span>
+            <h3 class="text-xl font-bold mb-2">The Psychology of Time: Why Some Days Feel Longer Than Others</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Uncover the fascinating psychological reasons behind our perception of time and how it changes.
+            </p>
+            <button onclick="showArticle('article-3')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 4 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=Productivity+Hacks" alt="A notebook with a to-do list.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Productivity</span>
+            <h3 class="text-xl font-bold mb-2">5 Simple Productivity Hacks for a More Efficient Day</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Learn practical, easy-to-implement tips for making the most of your time, every single day.
+            </p>
+            <button onclick="showArticle('article-4')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Blog Post 5 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=World+Time+Zones" alt="A world map with time zone lines.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Travel</span>
+            <h3 class="text-xl font-bold mb-2">A Guide to Understanding World Time Zones</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Explore the complexities of international time zones and how they impact global communication and travel.
+            </p>
+            <button onclick="showArticle('article-5')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 6 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=Daylight+Saving+Time" alt="A clock moving forward an hour.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">History</span>
+            <h3 class="text-xl font-bold mb-2">The Story of Daylight Saving Time: From Idea to Controversy</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Learn about the origins of DST, its pros and cons, and why some countries are abandoning it.
+            </p>
+            <button onclick="showArticle('article-6')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Blog Post 7 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=Ancient+Calendars" alt="An ancient tablet with calendar markings.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">History</span>
+            <h3 class="text-xl font-bold mb-2">Ancient Calendars: From Lunar Cycles to Sun Gods</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Take a journey back in time to discover how ancient civilizations tracked time with celestial bodies.
+            </p>
+            <button onclick="showArticle('article-7')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 8 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=Time+Blocking" alt="A person managing a schedule.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Productivity</span>
+            <h3 class="text-xl font-bold mb-2">Mastering Your Schedule: A Deep Dive into Effective Time Blocking</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              A detailed guide on how to use time blocking to boost your focus and achieve your goals.
+            </p>
+            <button onclick="showArticle('article-8')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 9 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=Chronobiology" alt="A brain with gears.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Science</span>
+            <h3 class="text-xl font-bold mb-2">The Science of Chronobiology: Your Body's Internal Clock</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Learn about your circadian rhythm and how to align your daily schedule with your body's natural clock for better health.
+            </p>
+            <button onclick="showArticle('article-9')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 10 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=New+Year+Traditions" alt="A New Year's countdown.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Culture</span>
+            <h3 class="text-xl font-bold mb-2">Celebrating New Beginnings: New Year's Traditions Around the World</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Explore the fascinating diversity of how cultures across the globe mark the passage of a new year.
+            </p>
+            <button onclick="showArticle('article-10')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Blog Post 11 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/EEAECA/FFFFFF?text=Calendar+Differences" alt="Two calendars side-by-side.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">History</span>
+            <h3 class="text-xl font-bold mb-2">Understanding the Julian Calendar vs. the Gregorian Calendar</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              Learn about the key differences between these two foundational calendars and their historical significance.
+            </p>
+            <button onclick="showArticle('article-11')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Blog Post 12 -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/D3A8E0/FFFFFF?text=Value+of+Time" alt="A person looking at a beautiful sunset.">
+          <div class="p-6">
+            <span class="inline-block bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-semibold px-2 py-1 rounded-full mb-2">Inspiration</span>
+            <h3 class="text-xl font-bold mb-2">Timeless Quotes: Wisdom on the Value of Time</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              A collection of thought-provoking quotes and sayings that will inspire you to value and use your time wisely.
+            </p>
+            <button onclick="showArticle('article-12')" class="inline-flex items-center text-accent-rose font-medium text-sm hover:underline">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ml-1"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Content Section (initially hidden) -->
+    <section id="article-content" class="article-section max-w-4xl mx-auto px-4 py-10 md:py-16">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <button onclick="showArticleList()" class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          Back to Blog Posts
+        </button>
+      </div>
+      <img id="article-image" class="w-full rounded-xl mb-6 shadow-md" alt="">
+      <h2 id="article-title" class="text-3xl md:text-4xl font-extrabold mb-2"></h2>
+      <p id="article-meta" class="text-sm text-gray-500 dark:text-gray-400 mb-6"></p>
+      <div id="article-body" class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+        <!-- Article content will be injected here -->
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="max-w-6xl mx-auto px-4 py-16">
+      <div class="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8 sm:p-12 text-center">
+        <h2 class="text-3xl font-extrabold text-gray-800 dark:text-gray-100 mb-4">
+          Stay Up to Date
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 max-w-xl mx-auto mb-6">
+          Subscribe to our newsletter to receive the latest blog posts, updates, and tips delivered straight to your inbox.
+        </p>
+        <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <input type="email" placeholder="Enter your email address" class="flex-1 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-accent-rose" required />
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-accent-rose text-white font-medium hover:bg-accent-rose/90 active:scale-[.99] transition">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== Theme Toggling =====
+    function toggleTheme() {
+      const isDarkMode = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      updateThemeButton();
+    }
+    
+    function updateThemeButton() {
+      const themeBtn = document.getElementById('theme-toggle-btn');
+      if (!themeBtn) return;
+
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      themeBtn.innerHTML = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      updateThemeButton();
+    });
+
+    // ===== Article Content Management =====
+    const articles = {
+      'article-1': {
+        title: 'The Fascinating History of Leap Years',
+        meta: 'Published: October 26, 2023',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=The+Science+of+Leap+Years',
+        content: `
+          <p>The concept of a leap year, the addition of a 29th day to February, is a fascinating and crucial component of our modern calendar. Its existence is not a mere tradition but a scientific necessity to keep our timekeeping system aligned with the Earth's orbit around the sun. The solar year, the time it takes for the Earth to complete one full orbit, is approximately 365.2422 days long. A standard calendar year of 365 days is therefore an incomplete measure, leading to a small but significant discrepancy of nearly six hours each year.</p>
+          <p>The first major attempt to solve this problem came from the Romans. In 45 B.C., Julius Caesar, advised by the Alexandrian astronomer Sosigenes, introduced the Julian calendar. This calendar, which was a significant improvement over previous Roman systems, decreed a simple rule: a leap day would be added every four years without exception. This calculation, while effective for a time, was still slightly inaccurate. It overcompensated for the solar year by about 11 minutes annually. While this seemed negligible at the time, over centuries, this small error compounded, causing the calendar to fall out of sync with the seasons. By the 16th century, the spring equinox was occurring around March 11th, rather than its traditional date of March 21st.</p>
+          <p>This growing discrepancy posed a significant problem for the Christian church, as the date of Easter was traditionally calculated based on the spring equinox. To fix this, Pope Gregory XIII, with the help of astronomers Christopher Clavius and Luigi Lilio, introduced the Gregorian calendar in 1582. The new calendar not only corrected the accumulated error by removing 10 days from the year, but also refined the leap year rule. The Gregorian rule states that a year is a leap year if it is divisible by four, with one important exception: years divisible by 100 are not leap years, unless they are also divisible by 400. This is why the year 2000 was a leap year, but 1900 was not. The Gregorian calendar is now the most widely used civil calendar in the world, a testament to the meticulous efforts of scientists and leaders to accurately measure and organize time.</p>
+        `
+      },
+      'article-2': {
+        title: 'How the Gregorian Calendar Shaped the Modern World',
+        meta: 'Published: November 15, 2023',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=Modern+Calendar+Standard',
+        content: `
+          <p>Before the widespread adoption of the Gregorian calendar, the world was a cacophony of different timekeeping systems. This lack of a standardized calendar created immense challenges for everything from international trade and communication to scientific research and religious observances. The introduction of the Gregorian calendar, a refinement of the earlier Julian system, was a pivotal moment in history that brought a new level of order to a chaotic world. Its precision and universality laid the groundwork for the interconnected society we know today.</p>
+          <p>The calendar’s primary innovation was its superior accuracy. By correcting the slight overage of the Julian calendar, it ensured that the seasons and celestial events, like the equinoxes, would remain consistent year after year. This precision was not just a matter of scientific interest; it was crucial for agricultural planning and religious holidays, particularly for determining the date of Easter. As nations began to adopt the new calendar—a process that took centuries, with some countries holding out until the early 20th century—it became a universal standard that facilitated synchronization on a global scale. Travelers and merchants no longer had to account for different dates in different cities, and scientific data could be shared and understood with a common frame of reference.</p>
+          <p>Beyond its practical applications, the Gregorian calendar also had a profound impact on social and cultural life. It became a shared rhythm that unified communities and nations, influencing everything from the timing of festivals to the scheduling of parliamentary sessions. In essence, the Gregorian calendar provided a common language for time. It allowed people across different countries and continents to schedule events, track historical dates, and coordinate activities with a shared understanding. This seemingly simple change laid the groundwork for the modern, interconnected world we live in today, where a date in New York is the same as a date in Tokyo, creating a seamless flow of information and commerce that would have been unimaginable in previous centuries.</p>
+        `
+      },
+      'article-3': {
+        title: 'The Psychology of Time: Why Some Days Feel Longer Than Others',
+        meta: 'Published: December 5, 2023',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=Time+Perception',
+        content: `
+          <p>Have you ever noticed how time seems to fly when you’re deeply engaged in an activity, but drags on endlessly when you’re bored or waiting? This common experience isn't just an illusion; it's a fascinating aspect of the psychology of time perception. Our brain’s internal clock, governed by various cognitive and emotional factors, is not a consistent metronome. Instead, it’s highly influenced by our emotional state, our level of attention, and the novelty of our experiences, leading to a subjective and malleable sense of time.</p>
+          <p>One key factor is the distinction between "prospective" and "retrospective" time perception. Prospective time is how we feel time passing in the moment. When we are deeply engaged in an activity, whether it's playing a video game, working on a passion project, or having a stimulating conversation, our attention is so focused on the task at hand that we are not actively monitoring the clock. This lack of attention to time makes it feel like it’s moving quickly, often to our surprise when we finally look up. Conversely, when we are bored or waiting for something, our attention has nowhere to go but to the passage of time itself, making every second feel like an eternity.</p>
+          <p>Retrospective time, on the other hand, is how we remember the duration of an event after it’s over. This is why a week-long vacation can feel like it flew by while you were there, but feels much longer when you look back on it. Our memory tends to encode novel and unique experiences more strongly. When a day or a period of time is filled with new places, people, or activities, our brain creates more distinct memories and "anchor points," making the period feel longer in retrospect. Conversely, when we are stuck in a routine and every day feels the same, our brain creates fewer new memories, causing time to seem to compress and blur together. This "time compression" can lead to a feeling that months and even years have passed in an instant. This phenomenon highlights that our perception of time is less about a linear progression and more about the quality and richness of our experiences.</p>
+        `
+      },
+      'article-4': {
+        title: '5 Simple Productivity Hacks for a More Efficient Day',
+        meta: 'Published: December 21, 2023',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=Smart+Work+Habits',
+        content: `
+          <p>In today’s fast-paced world, feeling overwhelmed by your to-do list is a common experience. The key to getting more done isn't about working longer or harder; it's about working smarter. Incorporating simple, effective productivity hacks into your daily routine can help you take control of your day, manage your tasks, and achieve your goals with greater efficiency. Here are five powerful tips to get you started on your journey to a more productive life.</p>
+          <p><strong>1. The Pomodoro Technique:</strong> This method, developed by Francesco Cirillo, breaks down work into focused intervals, typically 25 minutes long, separated by short breaks of 5 minutes. After four "Pomodoros," you take a longer break of 15-30 minutes. The structured nature of this technique helps combat burnout, improves focus, and creates a sense of urgency. It trains your brain to stay focused for short bursts, making daunting tasks feel more manageable.</p>
+          <p><strong>2. Prioritize with the Eisenhower Matrix:</strong> Not all tasks are created equal. The Eisenhower Matrix, named after President Dwight D. Eisenhower, is a simple decision-making tool that helps you categorize your tasks into four quadrants: Urgent & Important (Do), Important but Not Urgent (Schedule), Urgent but Not Important (Delegate), and Neither Urgent nor Important (Eliminate). This system helps you focus on what truly matters, freeing up time by delegating or eliminating less critical tasks.</p>
+          <p><strong>3. Time Blocking:</strong> Instead of simply having a to-do list, schedule specific blocks of time in your calendar for each task. This creates a clear roadmap for your day and helps you avoid multitasking, which is often less efficient and can lead to more errors. By allocating dedicated time for each activity, you are mentally committing to a task, which can significantly boost your focus and productivity.</p>
+          <p><strong>4. Minimize Distractions:</strong> In a digital world, distractions are everywhere. Identify and actively eliminate your biggest time-wasters. This could mean turning off social media notifications, closing unnecessary browser tabs, or finding a quiet space to work. The less you are interrupted, the more you can get into a "flow state," a highly productive mental state where you are fully immersed in your work. Consider using apps or browser extensions that block distracting websites during your designated work times.</p>
+          <p><strong>5. The Two-Minute Rule:</strong> Developed by author David Allen, the creator of Getting Things Done (GTD), this rule is incredibly simple and effective. If a task takes less than two minutes to complete, do it immediately. This prevents small, easy tasks from piling up and becoming overwhelming later. By tackling these quickly, you build momentum, reduce mental clutter, and keep your workspace tidy, freeing up your mental energy for more complex tasks.</p>
+        `
+      },
+      'article-5': {
+        title: 'A Guide to Understanding World Time Zones',
+        meta: 'Published: January 10, 2024',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=Global+Time+Zones',
+        content: `
+          <p>Navigating the world of time zones can be confusing, especially in an era of global communication, travel, and business. The foundation of our modern time zone system is Coordinated Universal Time (UTC), which serves as the global reference point for time. Think of UTC as the zero hour, similar to how the Prime Meridian is the zero reference for longitude. All other time zones are measured as positive or negative offsets from UTC.</p>
+          <p>Historically, every city and town had its own local time, based on the sun's position. This worked well for a localized, pre-industrial world, but it became a significant problem with the advent of the railroad and telegraph. Standardized train schedules, for instance, were impossible to manage when every station operated on a slightly different time. The need for a unified system became clear. In the late 19th century, Sir Sandford Fleming, a Scottish-Canadian engineer, proposed a worldwide system of time zones. This led to the International Meridian Conference in 1884, where the Greenwich Meridian in London was officially adopted as the Prime Meridian, and the basis for a global time system was established.</p>
+          <p>Time zones are essentially fixed geographical regions that all observe the same standard time. They are measured as offsets from UTC. For example, New York operates on Eastern Standard Time (EST), which is UTC-5, meaning it is five hours behind UTC. London is on Greenwich Mean Time (GMT), which is effectively the same as UTC, so its offset is UTC+0. When Daylight Saving Time (DST) is observed, the offset changes. For example, EST becomes Eastern Daylight Time (EDT), which is UTC-4. The implementation of time zones was a revolutionary idea that brought order to a world in motion. While time zones simplify global scheduling, they also create challenges, especially with the added complexity of Daylight Saving Time, which not all countries observe, further complicating international coordination and scheduling for businesses and individuals alike.</p>
+        `
+      },
+      'article-6': {
+        title: 'The Story of Daylight Saving Time: From Idea to Controversy',
+        meta: 'Published: February 2, 2024',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=DST+Debate',
+        content: `
+          <p>The practice of Daylight Saving Time (DST)—the seasonal adjustment of clocks forward by one hour—is a topic that has sparked debate for over a century. While it might seem like a modern inconvenience, its origins are surprisingly old, tracing back to the late 19th and early 20th centuries. One of the earliest proponents was New Zealand entomologist George Hudson, who proposed a two-hour clock shift in 1895 to allow for more daylight hours for bug collecting after work. The idea was later championed by British builder William Willett in 1907, who argued for the practice to save on energy costs and increase outdoor recreation time during the summer months by making better use of natural daylight.</p>
+          <p>The first widespread adoption of DST was during World War I. Germany was the first country to formally implement it in 1916 as a measure to conserve coal for the war effort. Other countries, including the United States and the United Kingdom, soon followed suit for the same wartime reasons. The rationale was simple: by shifting the clock forward, people would use less artificial lighting in the evenings, thereby saving precious fuel that could be redirected to military and industrial production. After the war, many countries abandoned DST, but it was reintroduced in many places during World War II and has remained a fixture of life in many parts of the world ever since.</p>
+          <p>While originally a measure for energy conservation, DST today is a topic of considerable debate. Proponents argue it benefits retail businesses, tourism, and outdoor activities, as people are more likely to shop and participate in leisure activities when it’s still light out in the evening. Critics, however, point to its negative effects on human health, citing studies that link the time change to an increased risk of heart attacks, car accidents, and disruptions to sleep patterns. Furthermore, the energy-saving benefits of DST have been questioned in the modern era, with many studies showing marginal or even non-existent savings. As a result, many regions around the world have either modified their DST rules or abandoned the practice altogether, highlighting the ongoing global conversation about how we manage our time and the unintended consequences of our timekeeping systems.</p>
+        `
+      },
+      'article-7': {
+        title: 'Ancient Calendars: From Lunar Cycles to Sun Gods',
+        meta: 'Published: March 18, 2024',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=Ancient+Timekeeping',
+        content: `
+          <p>Long before the digital clocks and standardized calendars we use today, ancient civilizations developed sophisticated systems for tracking time. These calendars were not just tools for organization; they were often deeply intertwined with their culture, religion, and agricultural needs, relying heavily on meticulous astronomical observations of the sun, moon, and stars. The diversity of these ancient calendars reveals how different cultures interpreted and lived by the rhythms of the cosmos.</p>
+          <p>One of the earliest and most widespread forms of timekeeping was based on the lunar cycle. The ancient Babylonians and Egyptians used lunar calendars, with months beginning at the first sighting of a new crescent moon. This system was useful for tracking religious festivals and tides, but it didn't align well with the solar year and the changing seasons, which were crucial for planting and harvesting crops. To solve this, some cultures, like the ancient Egyptians, transitioned to a solar calendar. Their calendar was based on the annual flooding of the Nile River, which coincided with the first appearance of the star Sirius in the sky. This allowed them to predict agricultural cycles with greater accuracy and provided a more stable basis for their society.</p>
+          <p>Perhaps one of the most complex and fascinating ancient calendars was that of the Mayan civilization. The Maya developed two intertwined calendars: the Tzolkin, a 260-day sacred calendar for religious events, and the Haab, a 365-day solar calendar for the agricultural year. These two calendars worked together in a great "Calendar Round" cycle of 52 years. The Maya also developed a "Long Count" calendar, which tracked time over vast cycles, and their detailed astronomical tables were incredibly precise, even more so than those of some European civilizations at the time. These complex systems, carved into stone and meticulously maintained by priests and astronomers, are a testament to humanity's enduring fascination with the rhythms of the cosmos and our need to organize the world around us. They remind us that our modern calendar is just one of many ingenious solutions to the universal challenge of timekeeping.</p>
+        `
+      },
+      'article-8': {
+        title: 'Mastering Your Schedule: A Deep Dive into Effective Time Blocking',
+        meta: 'Published: April 5, 2024',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=Time+Blocking+Method',
+        content: `
+          <p>In a world of constant pings and notifications, staying focused can feel like an impossible task. Our attention is constantly being pulled in different directions, leading to a feeling of busyness without a sense of accomplishment. Time blocking is a powerful productivity technique that helps you reclaim control of your schedule by assigning specific, dedicated blocks of time to specific tasks. Unlike a simple to-do list, which can be overwhelming and reactive, time blocking creates a proactive and visual roadmap for your day, week, or even month.</p>
+          <p>To begin, open your calendar—whether it’s a digital one or a paper planner—and start scheduling your time. Instead of just having a vague goal like "work on project," create a block from 9:00 AM to 11:00 AM specifically for that task. This method turns your abstract intentions into concrete commitments. It also forces you to be realistic about how long tasks actually take. If a task is big, you can break it down into smaller, more manageable blocks. For example, you can block off a 30-minute period for answering emails, a 45-minute block for a single, focused work session on a report, and a 15-minute block for a coffee break. By visualizing your day, you can see where your time is going and make intentional choices about how you spend it.</p>
+          <p>The main benefit of time blocking is that it helps you avoid the trap of "context switching"—the mental effort of moving from one task to another, which can be a major productivity killer. Research shows that it can take up to 23 minutes to refocus after a distraction. By focusing on one task at a time for a set period, you can achieve a state of "deep work," where you are fully immersed and can produce higher-quality results in less time. It’s not about becoming a robot who has every minute planned; it’s about intentionally designing your day to align with your most important goals and values. Start small by blocking out just a few hours a day and see how much more you can accomplish with focused effort.</p>
+        `
+      },
+      'article-9': {
+        title: 'The Science of Chronobiology: Your Body\'s Internal Clock',
+        meta: 'Published: May 20, 2024',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=Circadian+Rhythm',
+        content: `
+          <p>We've all heard the terms "early bird" and "night owl," but these labels are more than just personal preferences. They are a reflection of your body's natural internal clock, a field of study known as chronobiology. Our circadian rhythm is a biological process that operates on a roughly 24-hour cycle and influences everything from our sleep-wake patterns and alertness to our body temperature, hormone levels, and even our digestive system. This internal clock is a fundamental part of our biology, and its proper function is crucial for overall health and well-being.</p>
+          <p>This internal clock is primarily regulated by external cues, most notably light. When light hits our eyes, it sends a signal to a small region in our brain called the suprachiasmatic nucleus (SCN), often referred to as the body's master clock. The SCN then tells our body whether it’s time to be awake and active or to prepare for sleep by releasing hormones like melatonin. This explains why exposure to bright light, especially blue light from screens, late at night can disrupt our sleep, as our brain interprets it as daylight and suppresses melatonin production.</p>
+          <p>Understanding and respecting your own circadian rhythm can have a profound impact on your health and well-being. By aligning your daily schedule—including when you work, eat, and exercise—with your body’s natural clock, you can improve sleep quality, boost energy levels, and enhance mental performance. For example, a night owl trying to force themselves to be productive at 6 a.m. may be fighting against their natural biology. Instead, they might find greater success by scheduling their most demanding tasks for later in the day when their alertness naturally peaks. It’s not about forcing yourself into a rigid routine, but rather about learning to listen to your body and optimizing your lifestyle to work with, rather than against, your biological rhythms.</p>
+        `
+      },
+      'article-10': {
+        title: 'Celebrating New Beginnings: New Year\'s Traditions Around the World',
+        meta: 'Published: June 1, 2024',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=Global+New+Year+Traditions',
+        content: `
+          <p>The turning of a new year is a global event celebrated with a kaleidoscope of traditions, each reflecting the unique culture and history of its people. While many of us count down to midnight with fireworks and cheers, other countries have fascinating customs that represent hope for the future and a symbolic farewell to the past. These rituals, from the eating of specific foods to the performance of specific actions, highlight a universal human desire for renewal and good fortune.</p>
+          <p>In Spain, people eat twelve grapes at the stroke of midnight—one for each of the twelve chimes of the clock. This tradition, known as "Las Doce Uvas de la Suerte" (The Twelve Grapes of Luck), is believed to bring good fortune for each month of the coming year. In Denmark, old plates are saved throughout the year to be smashed on the doorsteps of friends and family on New Year's Eve, a symbol of good luck and friendship. The broken porcelain is a tangible sign of the many well-wishers a person has, and a larger pile of shards on your doorstep is considered a sign of a very lucky year to come.</p>
+          <p>Meanwhile, in Brazil, many people wear white to symbolize peace and renewal. They often go to the beach to jump seven waves and toss flowers into the ocean as an offering to the goddess of the sea, Iemanjá, for a prosperous year ahead. This ritual is meant to bring good luck and a fresh start. In Japan, New Year’s is one of the most important holidays. Families gather to eat traditional foods like toshikoshi soba noodles, which symbolize a long life. At midnight, Buddhist temples ring their bells 108 times to represent the 108 earthly temptations that must be overcome to achieve nirvana. These diverse traditions highlight a universal human desire to reflect on the past and embrace the future with optimism, no matter where you are in the world. They remind us that the passage of time is a moment for both personal and collective reflection.</p>
+        `
+      },
+      'article-11': {
+        title: 'Understanding the Julian Calendar vs. the Gregorian Calendar',
+        meta: 'Published: July 15, 2024',
+        image: 'https://placehold.co/1000x500/D3A8E0/FFFFFF?text=Calendar+Systems',
+        content: `
+          <p>While most of the modern world uses the Gregorian calendar, its predecessor, the Julian calendar, was the standard for over 1,500 years. Named after Julius Caesar, who introduced it in 45 B.C., the Julian calendar was a major innovation that standardized timekeeping across the vast Roman Empire. Its main feature was a simple and easy-to-remember rule for leap years: an extra day was added every four years without exception. This was a significant improvement over the previous Roman calendar, which had become complex and out of sync with the seasons.</p>
+          <p>However, this simplicity was also its downfall. The Julian calendar’s year was calculated to be 365.25 days long, which is slightly longer than the actual solar year of 365.2422 days. This small difference of about 11 minutes and 14 seconds per year accumulated over time. By the 16th century, the calendar was out of sync with the solar year by approximately 10 days, causing events like the spring equinox to occur much earlier than they should. This posed a significant problem for the Catholic Church, which relied on the spring equinox to determine the date of Easter. It was clear that a reform was needed to correct this growing discrepancy.</p>
+          <p>This growing discrepancy led to the Gregorian reform in 1582. Pope Gregory XIII, advised by astronomers, created a more accurate system by introducing the leap year exceptions we use today. The new rule states that a year is a leap year if it is divisible by four, but years divisible by 100 are not leap years, unless they are also divisible by 400. This clever adjustment made the calendar much more precise and brought it back into alignment with the solar year. The Gregorian calendar was adopted by most Catholic countries immediately, but Protestant and Orthodox countries were slower to adopt it, leading to a period of historical confusion where different regions observed different dates. Today, the Gregorian calendar is the international standard for civil timekeeping, a testament to the scientific rigor that corrected a centuries-old error.</p>
+        `
+      },
+      'article-12': {
+        title: 'Timeless Quotes: Wisdom on the Value of Time',
+        meta: 'Published: August 1, 2024',
+        image: 'https://placehold.co/1000x500/EEAECA/FFFFFF?text=Value+Your+Time',
+        content: `
+          <p>Time is one of the most valuable resources we have, yet it is often the one we take for granted. Unlike money, time cannot be saved or earned back; once a moment has passed, it is gone forever. Throughout history, great thinkers, leaders, and artists have reflected on the nature of time and its importance. Their words serve as powerful reminders to live each moment with intention and purpose. Here is a collection of some of the most profound quotes on the value of time.</p>
+          <p><strong>"The two most powerful warriors are patience and time." - Leo Tolstoy</strong><br>Tolstoy's quote highlights the immense power of time to bring about change and progress. It suggests that many challenges can be overcome not just with force or speed, but through the steady, unyielding passage of time. This is a reminder that some things, like growth, healing, and long-term success, require a patient, long-term approach that only time can provide.</p>
+          <p><strong>"The bad news is time flies. The good news is you're the pilot." - Michael Altshuler</strong><br>This inspiring quote reframes our relationship with time from a passive one to an active one. We have the power to direct our lives and make choices that determine how we use our time, rather than just being carried along by it. It encourages us to be intentional with our schedules, our relationships, and our goals, recognizing that we are in control of the direction our lives take.</p>
+          <p><strong>"Either you run the day, or the day runs you." - Jim Rohn</strong><br>Rohn's simple yet profound statement underscores the importance of intentionality. It's a call to action to plan your time, set your priorities, and be proactive in pursuing your goals instead of simply reacting to events as they unfold. When you let the day run you, you are at the mercy of distractions and other people's priorities. When you run the day, you are living on your own terms.</p>
+          <p><strong>"Lost time is never found again." - Benjamin Franklin</strong><br>Franklin's words are a sober and powerful reminder of the non-renewable nature of time. It’s a call to be more mindful of how we spend our hours, encouraging us to invest our time in activities that are meaningful and fulfilling, rather than wasting it on things that do not serve our purpose. This quote resonates with the idea that every moment is a precious, non-repeatable opportunity.</p>
+          <p>These quotes remind us that while time is finite, its value is immeasurable, and how we choose to spend it is one of the most significant decisions we can make in our lives. They encourage a deeper appreciation for the moments we have and the potential that each new day holds.</p>
+        `
+      }
+    };
+
+    function showArticle(articleId) {
+      const articleData = articles[articleId];
+      if (!articleData) return;
+      
+      const blogListSection = document.getElementById('blog-list');
+      const articleContentSection = document.getElementById('article-content');
+      const articleImage = document.getElementById('article-image');
+      const articleTitle = document.getElementById('article-title');
+      const articleMeta = document.getElementById('article-meta');
+      const articleBody = document.getElementById('article-body');
+
+      // Populate article content
+      articleImage.src = articleData.image;
+      articleImage.alt = articleData.title;
+      articleTitle.textContent = articleData.title;
+      articleMeta.textContent = articleData.meta;
+      articleBody.innerHTML = articleData.content;
+      
+      // Hide blog list and show article content
+      blogListSection.style.display = 'none';
+      articleContentSection.style.display = 'block';
+      setTimeout(() => {
+        articleContentSection.classList.add('is-visible');
+      }, 10); // A small delay for the transition to work
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showArticleList() {
+      const blogListSection = document.getElementById('blog-list');
+      const articleContentSection = document.getElementById('article-content');
+
+      // Hide article content and show blog list
+      articleContentSection.classList.remove('is-visible');
+      setTimeout(() => {
+        articleContentSection.style.display = 'none';
+        blogListSection.style.display = 'block';
+      }, 500); // Wait for fade-out transition
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
