@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Due Date Calculator - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Input Toggle Styling */
+        .toggle-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--seekivo-pink-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .toggle-btn {
+            flex-grow: 1;
+            padding: 15px;
+            background-color: #fcebeb;
+            color: #555;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .toggle-btn.active {
+            background-color: var(--seekivo-pink-primary);
+            color: white;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+
+        .input-group input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-group input[type="date"]:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+        
+        /* Specific input containers */
+        #lmpInputGroup, #conceptionInputGroup {
+            display: none; /* Controlled by JS toggle */
+        }
+        
+        #lmpInputGroup.active, #conceptionInputGroup.active {
+            display: block;
+        }
+
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .results-container .result-output {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+        
+        .results-container .info-text {
+            font-size: 1.0em;
+            margin-top: 15px;
+            color: #777;
+        }
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header .nav-mobile {
+                display: none;
+                position: absolute;
+                top: 100%; 
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                flex-direction: column;
+                padding: 10px 0;
+                z-index: 100;
+            }
+
+            #menu-check:checked ~ .nav-mobile {
+                display: flex;
+            }
+            
+            .nav-mobile .nav-link, .nav-mobile .header-button {
+                margin: 5px 20px;
+                padding: 10px 0;
+                border: none;
+                background: none;
+                text-align: left;
+                width: auto;
+            }
+
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+            
+            .results-container .result-output {
+                font-size: 2.5em; /* Smaller on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        <nav class="nav-mobile">
+            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
+            <a href="https://seekivo.online/more%20calculators/" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Pregnancy Due Date Calculator</h1>
+            <p>Calculate your estimated due date based on your last menstrual period (LMP) or conception date.</p>
+
+            <form id="dueDateFormat">
+                
+                <div class="toggle-group">
+                    <button type="button" class="toggle-btn active" id="toggleLMP">Use LMP</button>
+                    <button type="button" class="toggle-btn" id="toggleConception">Use Conception Date</button>
+                </div>
+
+                <div class="input-group active" id="lmpInputGroup">
+                    <label for="lmpDate">Date of Last Menstrual Period (LMP):</label>
+                    <input type="date" id="lmpDate">
+                </div>
+
+                <div class="input-group" id="conceptionInputGroup">
+                    <label for="conceptionDate">Estimated Conception Date:</label>
+                    <input type="date" id="conceptionDate">
+                </div>
+
+                <button type="submit" class="calculate-button">Calculate Due Date</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3>Estimated Due Date (EDD):</h3>
+                <div class="result-output" id="outputDueDate">--</div>
+                <p class="info-text" id="outputTimeRemaining">--</p>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('dueDateFormat');
+        const resultsDiv = document.getElementById('results');
+        const outputDueDate = document.getElementById('outputDueDate');
+        const outputTimeRemaining = document.getElementById('outputTimeRemaining');
+
+        const lmpToggle = document.getElementById('toggleLMP');
+        const conceptionToggle = document.getElementById('toggleConception');
+        const lmpGroup = document.getElementById('lmpInputGroup');
+        const conceptionGroup = document.getElementById('conceptionInputGroup');
+        const lmpDateInput = document.getElementById('lmpDate');
+        const conceptionDateInput = document.getElementById('conceptionDate');
+
+        let calculationMode = 'LMP'; // Default mode
+
+        // --- INPUT TOGGLE LOGIC ---
+        function toggleInput(mode) {
+            calculationMode = mode;
+            
+            // Toggle active class on buttons
+            lmpToggle.classList.toggle('active', mode === 'LMP');
+            conceptionToggle.classList.toggle('active', mode === 'Conception');
+
+            // Toggle visibility of input groups
+            lmpGroup.classList.toggle('active', mode === 'LMP');
+            conceptionGroup.classList.toggle('active', mode === 'Conception');
+
+            // Clear the input that is currently hidden/inactive to ensure only one is used
+            if (mode === 'LMP') {
+                conceptionDateInput.value = '';
+            } else {
+                lmpDateInput.value = '';
+            }
+            resultsDiv.style.display = 'none';
+        }
+
+        lmpToggle.addEventListener('click', () => toggleInput('LMP'));
+        conceptionToggle.addEventListener('click', () => toggleInput('Conception'));
+
+        // --- CALCULATION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let dateInput, daysToAdd;
+
+            if (calculationMode === 'LMP') {
+                dateInput = lmpDateInput.value;
+                // Naegele's Rule: 40 weeks (280 days) from LMP
+                daysToAdd = 280; 
+            } else { // Conception
+                dateInput = conceptionDateInput.value;
+                // Add 38 weeks (266 days) from Conception
+                daysToAdd = 266; 
+            }
+
+            if (!dateInput) {
+                alert(`Please select a ${calculationMode === 'LMP' ? 'Last Menstrual Period' : 'Conception'} date.`);
+                return;
+            }
+            
+            // Use T00:00:00 to treat input date as start of the day and prevent timezone issues
+            const startDate = new Date(`${dateInput}T00:00:00`);
+            const today = new Date();
+
+            if (startDate.toString() === "Invalid Date" || startDate.getTime() > today.getTime()) {
+                 alert("Please enter a valid date in the past.");
+                 resultsDiv.style.display = 'none';
+                 return;
+            }
+
+            // Calculate Due Date
+            const dueDate = new Date(startDate);
+            dueDate.setDate(dueDate.getDate() + daysToAdd);
+            
+            // Format Due Date for display
+            const formattedDueDate = dueDate.toLocaleDateString('en-US', { 
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+            });
+
+            // Calculate Time Remaining/Elapsed
+            const MS_IN_DAY = 1000 * 60 * 60 * 24;
+            const diffMs = dueDate.getTime() - today.getTime();
+            
+            let infoText;
+            if (diffMs > 0) {
+                const daysRemaining = Math.ceil(diffMs / MS_IN_DAY);
+                const weeksRemaining = Math.ceil(daysRemaining / 7);
+                infoText = `Approximately ${weeksRemaining} weeks or ${daysRemaining} days remaining.`;
+            } else {
+                const daysElapsed = Math.floor(Math.abs(diffMs) / MS_IN_DAY);
+                infoText = `The baby was due ${daysElapsed} days ago.`;
+            }
+
+            // Update Results
+            outputDueDate.textContent = formattedDueDate;
+            outputTimeRemaining.textContent = infoText;
+            
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
