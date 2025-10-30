@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Zone Converter - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+
+        /* Input/Select Styling */
+        .input-group input[type="time"],
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Conversion Row for side-by-side inputs */
+        .conversion-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+        }
+        .conversion-row > div {
+            flex-grow: 1;
+        }
+        
+        .arrow-icon {
+            font-size: 2em;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .result-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        .result-box .label {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .result-box .value {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+        
+        .result-box .date-info {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* ... (Navigation mobile styles are consistent) ... */
+
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+
+            /* Inputs stacked on mobile */
+            .conversion-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .arrow-icon {
+                transform: rotate(90deg); /* Rotate arrow for vertical layout */
+                margin: 10px 0;
+            }
+            
+            .result-box .value {
+                font-size: 2.5em; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            <button class="header-button dark-mode-toggle" id="darkModeToggle">🌑 Dark Mode</button>
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        <nav class="nav">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+        <nav class="nav-mobile">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Time Zone Converter</h1>
+            <p>Instantly convert time between cities and countries. Great for travel, meetings, or global friendships.</p>
+
+            <form id="timezoneForm">
+                <div class="conversion-row">
+                    <div class="source-input">
+                        <div class="input-group">
+                            <label for="sourceZone">Source City/Time Zone:</label>
+                            <select id="sourceZone" required>
+                                <option value="">-- Select Source Zone --</option>
+                                <option value="-4">New York (GMT-4)</option>
+                                <option value="0">London (GMT+0)</option>
+                                <option value="2">Paris (GMT+2)</option>
+                                <option value="4">Dubai (GMT+4)</option>
+                                <option value="5.5">New Delhi (GMT+5:30)</option>
+                                <option value="8">Beijing (GMT+8)</option>
+                                <option value="10">Sydney (GMT+10)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="sourceTime">Source Time:</label>
+                            <input type="time" id="sourceTime" required value="09:00">
+                        </div>
+                    </div>
+                    
+                    <div class="arrow-icon">→</div>
+                    
+                    <div class="target-input">
+                        <div class="input-group">
+                            <label for="targetZone">Target City/Time Zone:</label>
+                            <select id="targetZone" required>
+                                <option value="">-- Select Target Zone --</option>
+                                <option value="-4">New York (GMT-4)</option>
+                                <option value="0">London (GMT+0)</option>
+                                <option value="2">Paris (GMT+2)</option>
+                                <option value="4">Dubai (GMT+4)</option>
+                                <option value="5.5">New Delhi (GMT+5:30)</option>
+                                <option value="8">Beijing (GMT+8)</option>
+                                <option value="10">Sydney (GMT+10)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Converted Time (below):</label>
+                            <input type="text" value="--:--" disabled style="text-align: center; color: #777;">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-button">Convert Time</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <div class="result-box">
+                    <div class="label" id="targetLabel">Time in Target City (--):</div>
+                    <div class="value" id="outputTime">--:--</div>
+                    <div class="date-info" id="outputDate">--</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('timezoneForm');
+        const resultsDiv = document.getElementById('results');
+        const sourceZoneSelect = document.getElementById('sourceZone');
+        const sourceTimeInput = document.getElementById('sourceTime');
+        const targetZoneSelect = document.getElementById('targetZone');
+        const targetLabel = document.getElementById('targetLabel');
+        const outputTime = document.getElementById('outputTime');
+        const outputDate = document.getElementById('outputDate');
+
+        // --- CORE CONVERSION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const sourceOffset = parseFloat(sourceZoneSelect.value); // e.g., -4, 0, 5.5
+            const targetOffset = parseFloat(targetZoneSelect.value); // e.g., 10, 8, 2
+            const sourceTimeString = sourceTimeInput.value; // e.g., "09:00"
+
+            if (isNaN(sourceOffset) || isNaN(targetOffset) || !sourceTimeString) {
+                alert("Please select both source and target time zones and a time.");
+                return;
+            }
+            
+            // 1. Calculate time difference in hours (Source -> Target)
+            // Example: Source (GMT-4) to Target (GMT+8). Diff = 8 - (-4) = +12 hours
+            // Example: Source (GMT+10) to Target (GMT+0). Diff = 0 - 10 = -10 hours
+            const offsetDifferenceHours = targetOffset - sourceOffset;
+            
+            // 2. Parse Source Time
+            const [sourceHour, sourceMinute] = sourceTimeString.split(':').map(Number);
+            
+            // 3. Calculate Total Minutes from Midnight for Source Time
+            const totalMinutes = (sourceHour * 60) + sourceMinute;
+            
+            // 4. Calculate Total Minutes to Shift
+            const shiftMinutes = Math.round(offsetDifferenceHours * 60);
+            
+            // 5. Calculate Target Time in Minutes
+            let targetTotalMinutes = totalMinutes + shiftMinutes;
+
+            // 6. Handle Day Shift (Wrap around 24 hours = 1440 minutes)
+            let dayShift = 0; // 0 for same day, -1 for previous day, 1 for next day
+            const MINUTES_IN_DAY = 1440;
+            
+            if (targetTotalMinutes >= MINUTES_IN_DAY) {
+                // Next day
+                dayShift = 1;
+                targetTotalMinutes -= MINUTES_IN_DAY;
+            } else if (targetTotalMinutes < 0) {
+                // Previous day
+                dayShift = -1;
+                targetTotalMinutes += MINUTES_IN_DAY;
+            }
+            
+            // 7. Format Target Time
+            const targetHour = Math.floor(targetTotalMinutes / 60);
+            const targetMinute = targetTotalMinutes % 60;
+            
+            const formattedTime = `${targetHour.toString().padStart(2, '0')}:${targetMinute.toString().padStart(2, '0')}`;
+            
+            // 8. Determine Target Date
+            const today = new Date();
+            const targetDate = new Date(today);
+            targetDate.setDate(today.getDate() + dayShift);
+            
+            const formattedDate = targetDate.toLocaleDateString('en-US', { 
+                weekday: 'long', month: 'long', day: 'numeric' 
+            });
+            
+            // 9. Update Results
+            const targetCity = targetZoneSelect.options[targetZoneSelect.selectedIndex].text.split(' ')[0];
+            targetLabel.textContent = `Time in ${targetCity}:`;
+            outputTime.textContent = formattedTime;
+            
+            if (dayShift === 0) {
+                outputDate.textContent = "Same Day (Today)";
+            } else if (dayShift === 1) {
+                outputDate.textContent = `Next Day: ${formattedDate}`;
+            } else { // -1
+                outputDate.textContent = `Previous Day: ${formattedDate}`;
+            }
+            
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
