@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Duration Calculator - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Input Group Layout */
+        .date-time-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .date-time-box {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fcfcfc;
+        }
+        .date-time-box h4 {
+            font-size: 1.2em;
+            color: #555;
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+        }
+
+        /* Form / Input Styling */
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.0em;
+        }
+
+        .input-group input[type="date"],
+        .input-group input[type="time"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1.0em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+            margin-bottom: 15px;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: var(--seekivo-pink-primary);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .duration-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .duration-item {
+            min-width: 100px;
+            padding: 10px;
+            border: 1px solid #ffc8d5;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .duration-item .value {
+            font-size: 2.0em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+        .duration-item .unit {
+            font-size: 0.9em;
+            color: #777;
+            font-weight: 600;
+            display: block;
+        }
+
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+            
+            /* Inputs stacked on mobile */
+            .date-time-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            /* Results smaller on mobile */
+            .duration-item {
+                flex-basis: calc(50% - 7.5px); /* Two items per row */
+                min-width: unset;
+                padding: 10px 5px;
+            }
+            .duration-item .value {
+                font-size: 1.5em;
+            }
+            .duration-item .unit {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            <button class="header-button dark-mode-toggle" id="darkModeToggle">🌑 Dark Mode</button>
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        <nav class="nav-mobile">
+            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
+            <a href="https://seekivo.online/more%20calculators/" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Event Duration Calculator</h1>
+            <p>Measure the total duration between two dates or times — perfect for projects, trips, or special events.</p>
+
+            <form id="durationForm">
+                
+                <div class="date-time-group">
+                    <div class="date-time-box">
+                        <h4>Start Date & Time</h4>
+                        <div class="input-group">
+                            <label for="startDate">Date:</label>
+                            <input type="date" id="startDate" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="startTime">Time (Optional):</label>
+                            <input type="time" id="startTime" value="00:00">
+                        </div>
+                    </div>
+                    
+                    <div class="date-time-box">
+                        <h4>End Date & Time</h4>
+                        <div class="input-group">
+                            <label for="endDate">Date:</label>
+                            <input type="date" id="endDate" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="endTime">Time (Optional):</label>
+                            <input type="time" id="endTime" value="00:00">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-button">Calculate Duration</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3>Total Time Elapsed:</h3>
+                
+                <div class="duration-grid" id="outputDurationGrid">
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('durationForm');
+        const resultsDiv = document.getElementById('results');
+        const outputDurationGrid = document.getElementById('outputDurationGrid');
+        
+        const MS_PER_MINUTE = 1000 * 60;
+        const MS_PER_HOUR = MS_PER_MINUTE * 60;
+        const MS_PER_DAY = MS_PER_HOUR * 24;
+
+        // --- HELPER FUNCTION TO DISPLAY RESULT ---
+        function displayResult(value, unit) {
+            const item = document.createElement('div');
+            item.classList.add('duration-item');
+            item.innerHTML = `<span class="value">${value.toLocaleString()}</span><span class="unit">${unit}</span>`;
+            outputDurationGrid.appendChild(item);
+        }
+        
+        // --- CORE CALCULATION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const startDateStr = document.getElementById('startDate').value;
+            const startTimeStr = document.getElementById('startTime').value || "00:00";
+            const endDateStr = document.getElementById('endDate').value;
+            const endTimeStr = document.getElementById('endTime').value || "00:00";
+            
+            if (!startDateStr || !endDateStr) {
+                alert("Please select both start and end dates.");
+                return;
+            }
+            
+            // Combine date and time into full JavaScript Date objects
+            const startDateTime = new Date(`${startDateStr}T${startTimeStr}:00`);
+            const endDateTime = new Date(`${endDateStr}T${endTimeStr}:00`);
+            
+            if (startDateTime >= endDateTime) {
+                alert("The start date/time must be before the end date/time.");
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            // Calculate difference in milliseconds
+            let differenceMs = endDateTime.getTime() - startDateTime.getTime();
+            outputDurationGrid.innerHTML = ''; // Clear previous results
+
+            // --- 1. Calculate TOTAL DAYS, HOURS, MINUTES ---
+            const totalMinutes = Math.round(differenceMs / MS_PER_MINUTE);
+            const totalHours = Math.round(differenceMs / MS_PER_HOUR);
+            const totalDays = Math.round(differenceMs / MS_PER_DAY);
+            
+            // --- 2. Calculate YEARS, MONTHS, DAYS (Granular - requires complex date manipulation) ---
+            
+            // Use the Date object manipulation for granular results (more accurate for months/years)
+            let current = new Date(startDateTime);
+            let years = 0;
+            let months = 0;
+            let days = 0;
+
+            // Calculate Years (Iterate year by year)
+            while (current < endDateTime && new Date(current).setFullYear(current.getFullYear() + 1) <= endDateTime) {
+                current.setFullYear(current.getFullYear() + 1);
+                years++;
+            }
+
+            // Calculate Months (Iterate month by month)
+            while (current < endDateTime && new Date(current).setMonth(current.getMonth() + 1) <= endDateTime) {
+                current.setMonth(current.getMonth() + 1);
+                months++;
+            }
+            
+            // Remaining difference (in milliseconds)
+            let remainingMs = endDateTime.getTime() - current.getTime();
+
+            // Calculate Days, Hours, Minutes, Seconds from remainingMs
+            let remainingDays = Math.floor(remainingMs / MS_PER_DAY);
+            remainingMs %= MS_PER_DAY;
+            let remainingHours = Math.floor(remainingMs / MS_PER_HOUR);
+            remainingMs %= MS_PER_HOUR;
+            let remainingMinutes = Math.round(remainingMs / MS_PER_MINUTE); // Round the final minutes
+
+            // If minutes roll over to an hour
+            if (remainingMinutes === 60) {
+                remainingHours += 1;
+                remainingMinutes = 0;
+            }
+            // If hours roll over to a day
+            if (remainingHours === 24) {
+                remainingDays += 1;
+                remainingHours = 0;
+            }
+            
+            days = remainingDays;
+
+            // --- Display Granular Results (Y/M/D/H/M) ---
+            if (years > 0) displayResult(years, 'Years');
+            if (months > 0 || years > 0) displayResult(months, 'Months');
+            displayResult(days, 'Days');
+            displayResult(remainingHours, 'Hours');
+            displayResult(remainingMinutes, 'Minutes');
+            
+            // --- Display Total Results (For clarity) ---
+            outputDurationGrid.innerHTML += '<div style="flex-basis: 100%; height: 1px; background: #ddd; margin: 10px 0;"></div>';
+
+            displayResult(totalDays, 'Total Days');
+            displayResult(totalHours.toLocaleString(), 'Total Hours');
+            displayResult(totalMinutes.toLocaleString(), 'Total Minutes');
+
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
