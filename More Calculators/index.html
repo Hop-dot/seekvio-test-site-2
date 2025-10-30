@@ -1,160 +1,242 @@
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8"></meta>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible"></meta>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
-    <title>Responsive Animation Cards</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Calculators - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-      /* Global Body Style */
-      body {
-        margin: 0;
-        padding: 20px;
-        font-family: "Roboto", sans-serif;
-        background: #f2f2f2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
-
-      /* Main Container holds the cards */
-      .main-container {
-        width: 90%;
-        max-width: 1200px;
-      }
-
-      /* Grid Container for cards */
-      .cards-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-      }
-
-      /* Card (Wrapper) Style */
-      .wrapper {
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 40px -8px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-      }
-
-      .wrapper img {
-        width: 100%;
-        display: block;
-      }
-
-      .wrapper .description {
-        padding: 16px;
-      }
-
-      .wrapper .description h2 {
-        font-size: 30px;
-        margin: 16px 0 8px;
-      }
-
-      .wrapper .description p {
-        font-size: 15px;
-        line-height: 1.6;
-        margin-bottom: 16px;
-      }
-
-      .wrapper .description .btn {
-        display: inline-block;
-        width: 100%;
-        padding: 8px 32px;
-        background: #F28C28;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 800;
-        text-decoration: none;
-        border-radius: 10px;
-        text-align: center;
-        box-sizing: border-box;
-        margin-bottom: 16px;
-      }
-
-      /* Responsive: On small screens, stack cards */
-      @media (max-width: 600px) {
-        .cards-container {
-          grid-template-columns: 1fr;
+        /* General Body Styling */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Lighter pink background for the page */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align content to the top */
+            min-height: 100vh; /* Minimum height to cover viewport */
+            padding: 40px 20px; /* Padding around the content */
+            box-sizing: border-box;
         }
-      }
+
+        /* Gradient for the main theme */
+        .pink-gradient {
+            background: linear-gradient(to right, #FF80AB, #FFC1E3); /* A more pronounced pink gradient */
+            color: white; /* Text color for elements with this gradient */
+        }
+        
+        .glossy-gradient-button {
+            background: linear-gradient(to right, #FF80AB 0%, #FFC1E3 100%);
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .glossy-gradient-button:hover {
+            background: linear-gradient(to right, #FF99C2 0%, #FFD1ED 100%);
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Container for the entire page content */
+        .main-container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* Page Title Section */
+        .hero-section {
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5em; /* Larger, more prominent title */
+            font-weight: 800; /* Extra bold */
+            display: inline-block; /* To apply gradient to text */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent; /* Hide original text color */
+            background-image: linear-gradient(to right, #D84F8D, #FF80AB); /* Main gradient from homepage */
+            margin-bottom: 10px;
+        }
+        
+        .hero-section p {
+            font-size: 1.2em;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        /* Calculator Grid */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .calculator-card {
+            background-color: #fefefe; /* Slightly off-white for cards */
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center; /* Center content horizontally */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+            border: 1px solid #eee; /* Subtle border */
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .calculator-card .icon {
+            font-size: 3.5em; /* Larger icons */
+            color: #D84F8D; /* Use the primary pink for icons */
+            margin-bottom: 20px;
+        }
+
+        .calculator-card h3 {
+            font-size: 1.6em; /* Larger heading for card */
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .calculator-card p {
+            font-size: 1.05em;
+            color: #666;
+            flex-grow: 1;
+            margin-bottom: 25px; /* More space before button */
+            line-height: 1.5;
+        }
+
+        .calculator-card .use-tool-button {
+            display: inline-block;
+            color: #fff;
+            padding: 15px 30px; /* Larger button */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05em;
+            letter-spacing: 0.5px;
+            min-width: 150px; /* Ensure buttons have consistent width */
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.8em;
+            }
+            .hero-section p {
+                font-size: 1em;
+            }
+            .main-container {
+                padding: 30px;
+                margin: 20px;
+            }
+            .calculator-card {
+                padding: 25px 15px;
+            }
+            .calculator-card .icon {
+                font-size: 3em;
+            }
+            .calculator-card h3 {
+                font-size: 1.4em;
+            }
+            .calculator-card p {
+                font-size: 0.95em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            .hero-section h1 {
+                font-size: 2.2em;
+            }
+            .hero-section p {
+                font-size: 0.9em;
+            }
+            .main-container {
+                padding: 20px;
+            }
+            .calculator-grid {
+                grid-template-columns: 1fr; /* Stack cards on very small screens */
+            }
+            .calculator-card .icon {
+                font-size: 2.5em;
+            }
+            .calculator-card h3 {
+                font-size: 1.2em;
+            }
+            .calculator-card .use-tool-button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
     </style>
-  </head>
-  <body>
-        <center><h2>🗞️ Stay Curious. Stay Informed.</h2>
-          <p>Welcome to our <strong>News Stories Hub</strong>—your go-to source for the latest headlines, student-relevant updates & global happenings. Whether it's  <strong><i>Breaking News, Tech & Education Insights, Visa Alerts, or Health & Wellness updates</i></strong>, we keep you informed with stories that matter to your journey, studies, and future abroad.</p></center>
-   
-    
-    
-    <br>
+</head>
+<body>
+
     <div class="main-container">
-      <div class="cards-container">
-        <!-- Card 1 -->
-        <div class="wrapper">
-          <div class="image">
-            <img alt="Card Image 1" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgchNG3fappJ8n7K1pD_UY5yZDqFJNQxUw3_nZg-9aO60f6l43BkDA33yCW29ADzOj_e3lEQ1M4kRCD8YP4Ju7GJFjniePl5oi5HzaVhN4xin7BgFscNJqgHfldediZ6cLibrNiEGMHTg12DALF-2c0U3EQXzwKAd0vl6WnBdyZBmB3JalwewJ7rj0uUyQ/s320/pexels-fotios-photos-1369476.jpg" />
-          </div>
-          <div class="description">
-            <center><h2>General News</h2></center>
-               <center><p>Get up-to-date coverage of important events & stories from around the world. From <strong>politics to culture & current affairs</strong> e.t.c., our General News section keeps you in the know with insights that matter to students & curious minds alike.
-                 </p></center>
-           <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
-          </div>
-        </div>
+        <section class="hero-section">
+            <h1>Essential Calculators</h1>
+            <p>Your toolkit for dates, time, and more.</p>
+        </section>
 
-        <!-- Card 2 -->
-        <div class="wrapper">
-          <div class="image">
-            <img alt="Card Image 2" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjc35P-JsZFrltrMienHdfjlCaxXpWA9TeBWjdW0jo3CRo2dPyZjRAu6nFcL5yiKyML42sOaFGqF0iXOjsF471z6iHuW-OpxnU5Ef4nMfE1btNpDIEKMcykgWCJ7QHlLljCcSB8pPqSKhDY0P8M-GqsqGM9jHn8o3257J6I7hFB4yNryk4qo8SkVsyhi1A/s320/pexels-garrettmorrow-682933.jpg" />
-          </div>
-          <div class="description">
-            <center><h2>Tech & Edu News</h2></center>
-            <center><p>Explore the latest trends in technology & education. From breakthrough <strong>edtech tools to university policies & innovations</strong>, stay ahead with news that shapes how we learn, teach, & connect in a digital world.
-              </p></center>
-            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
-          </div>
-        </div>
+        <section class="calculator-grid">
+            <div class="calculator-card">
+                <div class="icon">🗓️</div>
+                <h3>Days Until</h3>
+                <p>Count down to any future event: birthdays, holidays, deadlines, or personal milestones.</p>
+                <a href="/days-until-calculator" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
 
-        <!-- Card 3 -->
-        <div class="wrapper">
-          <div class="image">
-            <img alt="Card Image 3" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQ2ZT29kt5kZo_dSfz3cNH6WXEJgqa-Ep8qkuPKFnBSZo5p1B-bSqccDRPwHyWs0yQAoeuZ7WEksr0lOyC64qvw5qoImwVnFSmysi7T8XBGBmVTFCJsYwNL4vek4T0i50Ldj8iPnl46jkHOLUpP0rLhOsJ3dlPXQD8au8IA0x7f1CdEsPkwOyYqZH4VUw/s320/immigration-law-South-Africa-1.jpg" />
-          </div>
-          <div class="description">
-            <center><h2>Visa & Immigration News</h2></center>
-            <center><p>Keep track of visa changes, immigration policies, & border updates worldwide. We break down the latest news so you can plan <strong>travel, study, or work abroad</strong> with confidence and stay informed about what’s happening globally.
-             </p></center>
-            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
-          </div>
-        </div>
-        
-         <!-- Card 4 -->
-        <div class="wrapper">
-          <div class="image">
-            <img alt="Card Image 3" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZ6LyFf3pv_UtPRJU1wztnmapISjgrRxy_omvZ_sgNEQWDBgepMM1vBhWYlyzt2q32ppQD1kzQKirMyip3733HVzFgcuKIYQbILwlLDWVB5FMpdrX-rCC2DK2e-JvROxdl45MM7G1GzRqNRM-qQHdTJ-zc5a1hXM-Mtbj8rF_UTgw-hAg1m_hOtVDfncY/s320/empowered-woman-embracing-fitness-nutrition-wellness-journey_1326207-3300.jpg" />
-          </div>
-          <div class="description">
-            <center><h2>Health & Wellness</h2></center>
-            <center><p>Discover news & advice on staying healthy in body and mind. From <strong>mental health awareness to campus wellness initiatives & global health updates e.tc.</strong>, find the resources you need to support a balanced, thriving life.
-             </p></center>
-            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
-          </div>
-        </div>
-        
-         
-        
-        <!-- GSAP Animation Scripts -->
-    <script crossorigin="anonymous" integrity="sha512-Mf/xUqfWvDIr+1B6zfnIDIiG7XHzyP/guXUWgV6PgaQoIFeXkJQR5XWh9fqAiCiRCpemabt3naV4jhDWVnuYDQ==" referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
-    <script>
-      // Animate each card individually
-      document.querySelectorAll('.wrapper').forEach(card => {
-        const tl = gsap.timeline({ defaults: { duration: 1, ease: "power1.out" } });
-        tl.from(card.querySelector('.image'), { y: -100 })
-          .from(card.querySelector('h2'), { x: -50, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.5")
-          .from(card.querySelector('p'), { x: -50, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.5")
-          .from(card.querySelector('.btn'), { opacity: 0, scale: 0.8, ease: "elastic.out(1, 0.5)" }, "-=0.3");
-      });
-    </script>
-  </body>
+            <div class="calculator-card">
+                <div class="icon">👥</div>
+                <h3>Age Difference</h3>
+                <p>Compare the age difference between two people or two specific dates precisely.</p>
+                <a href="/age-difference-calculator" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
+
+            <div class="calculator-card">
+                <div class="icon">🛠️</div>
+                <h3>Work Days</h3>
+                <p>Calculate only weekdays (Mon-Fri) between two dates, with options to exclude public holidays.</p>
+                <a href="/work-days-calculator" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
+
+            <div class="calculator-card">
+                <div class="icon">⏰</div>
+                <h3>Countdown Timer</h3>
+                <p>Generate and share live countdown links for events, product launches, or exams.</p>
+                <a href="/countdown-timer-generator" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
+
+            <div class="calculator-card">
+                <div class="icon">📅</div>
+                <h3>Date to Day</h3>
+                <p>Instantly convert any historical or future date into its corresponding weekday name.</p>
+                <a href="/date-to-day-converter" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
+
+            <div class="calculator-card">
+                <div class="icon">⏱️</div>
+                <h3>Time Difference</h3>
+                <p>Calculate the exact hours and minutes between two times, including across time zones.</p>
+                <a href="/time-difference-calculator" class="use-tool-button glossy-gradient-button">Use Tool</a>
+            </div>
+        </section>
+    </div>
+
+</body>
 </html>
