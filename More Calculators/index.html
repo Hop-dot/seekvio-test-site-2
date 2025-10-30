@@ -1,0 +1,160 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"></meta>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"></meta>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"></meta>
+    <title>Responsive Animation Cards</title>
+    <style>
+      /* Global Body Style */
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: "Roboto", sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* Main Container holds the cards */
+      .main-container {
+        width: 90%;
+        max-width: 1200px;
+      }
+
+      /* Grid Container for cards */
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      /* Card (Wrapper) Style */
+      .wrapper {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 40px -8px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      .wrapper img {
+        width: 100%;
+        display: block;
+      }
+
+      .wrapper .description {
+        padding: 16px;
+      }
+
+      .wrapper .description h2 {
+        font-size: 30px;
+        margin: 16px 0 8px;
+      }
+
+      .wrapper .description p {
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .wrapper .description .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 8px 32px;
+        background: #F28C28;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 800;
+        text-decoration: none;
+        border-radius: 10px;
+        text-align: center;
+        box-sizing: border-box;
+        margin-bottom: 16px;
+      }
+
+      /* Responsive: On small screens, stack cards */
+      @media (max-width: 600px) {
+        .cards-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+        <center><h2>🗞️ Stay Curious. Stay Informed.</h2>
+          <p>Welcome to our <strong>News Stories Hub</strong>—your go-to source for the latest headlines, student-relevant updates & global happenings. Whether it's  <strong><i>Breaking News, Tech & Education Insights, Visa Alerts, or Health & Wellness updates</i></strong>, we keep you informed with stories that matter to your journey, studies, and future abroad.</p></center>
+   
+    
+    
+    <br>
+    <div class="main-container">
+      <div class="cards-container">
+        <!-- Card 1 -->
+        <div class="wrapper">
+          <div class="image">
+            <img alt="Card Image 1" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgchNG3fappJ8n7K1pD_UY5yZDqFJNQxUw3_nZg-9aO60f6l43BkDA33yCW29ADzOj_e3lEQ1M4kRCD8YP4Ju7GJFjniePl5oi5HzaVhN4xin7BgFscNJqgHfldediZ6cLibrNiEGMHTg12DALF-2c0U3EQXzwKAd0vl6WnBdyZBmB3JalwewJ7rj0uUyQ/s320/pexels-fotios-photos-1369476.jpg" />
+          </div>
+          <div class="description">
+            <center><h2>General News</h2></center>
+               <center><p>Get up-to-date coverage of important events & stories from around the world. From <strong>politics to culture & current affairs</strong> e.t.c., our General News section keeps you in the know with insights that matter to students & curious minds alike.
+                 </p></center>
+           <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="wrapper">
+          <div class="image">
+            <img alt="Card Image 2" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjc35P-JsZFrltrMienHdfjlCaxXpWA9TeBWjdW0jo3CRo2dPyZjRAu6nFcL5yiKyML42sOaFGqF0iXOjsF471z6iHuW-OpxnU5Ef4nMfE1btNpDIEKMcykgWCJ7QHlLljCcSB8pPqSKhDY0P8M-GqsqGM9jHn8o3257J6I7hFB4yNryk4qo8SkVsyhi1A/s320/pexels-garrettmorrow-682933.jpg" />
+          </div>
+          <div class="description">
+            <center><h2>Tech & Edu News</h2></center>
+            <center><p>Explore the latest trends in technology & education. From breakthrough <strong>edtech tools to university policies & innovations</strong>, stay ahead with news that shapes how we learn, teach, & connect in a digital world.
+              </p></center>
+            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="wrapper">
+          <div class="image">
+            <img alt="Card Image 3" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQ2ZT29kt5kZo_dSfz3cNH6WXEJgqa-Ep8qkuPKFnBSZo5p1B-bSqccDRPwHyWs0yQAoeuZ7WEksr0lOyC64qvw5qoImwVnFSmysi7T8XBGBmVTFCJsYwNL4vek4T0i50Ldj8iPnl46jkHOLUpP0rLhOsJ3dlPXQD8au8IA0x7f1CdEsPkwOyYqZH4VUw/s320/immigration-law-South-Africa-1.jpg" />
+          </div>
+          <div class="description">
+            <center><h2>Visa & Immigration News</h2></center>
+            <center><p>Keep track of visa changes, immigration policies, & border updates worldwide. We break down the latest news so you can plan <strong>travel, study, or work abroad</strong> with confidence and stay informed about what’s happening globally.
+             </p></center>
+            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
+          </div>
+        </div>
+        
+         <!-- Card 4 -->
+        <div class="wrapper">
+          <div class="image">
+            <img alt="Card Image 3" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgZ6LyFf3pv_UtPRJU1wztnmapISjgrRxy_omvZ_sgNEQWDBgepMM1vBhWYlyzt2q32ppQD1kzQKirMyip3733HVzFgcuKIYQbILwlLDWVB5FMpdrX-rCC2DK2e-JvROxdl45MM7G1GzRqNRM-qQHdTJ-zc5a1hXM-Mtbj8rF_UTgw-hAg1m_hOtVDfncY/s320/empowered-woman-embracing-fitness-nutrition-wellness-journey_1326207-3300.jpg" />
+          </div>
+          <div class="description">
+            <center><h2>Health & Wellness</h2></center>
+            <center><p>Discover news & advice on staying healthy in body and mind. From <strong>mental health awareness to campus wellness initiatives & global health updates e.tc.</strong>, find the resources you need to support a balanced, thriving life.
+             </p></center>
+            <center><a class="btn" href="https://schoolsupreme101.blogspot.com/p/dataentry-level-jobs.html"><strong><i>Click Here!</i></strong></a></center>
+          </div>
+        </div>
+        
+         
+        
+        <!-- GSAP Animation Scripts -->
+    <script crossorigin="anonymous" integrity="sha512-Mf/xUqfWvDIr+1B6zfnIDIiG7XHzyP/guXUWgV6PgaQoIFeXkJQR5XWh9fqAiCiRCpemabt3naV4jhDWVnuYDQ==" referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script>
+      // Animate each card individually
+      document.querySelectorAll('.wrapper').forEach(card => {
+        const tl = gsap.timeline({ defaults: { duration: 1, ease: "power1.out" } });
+        tl.from(card.querySelector('.image'), { y: -100 })
+          .from(card.querySelector('h2'), { x: -50, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.5")
+          .from(card.querySelector('p'), { x: -50, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.5")
+          .from(card.querySelector('.btn'), { opacity: 0, scale: 0.8, ease: "elastic.out(1, 0.5)" }, "-=0.3");
+      });
+    </script>
+  </body>
+</html>
