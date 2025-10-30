@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Expectancy Calculator - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+        
+        /* General Input/Select Styling */
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+            background-color: #fff;
+            appearance: none; /* Remove default arrow on select */
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Radio Button Group Styling */
+        .radio-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .radio-options label {
+            flex: 1 1 45%; /* Allows two columns on wider screens */
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0; /* Override input-group label margin */
+        }
+        .radio-options input[type="radio"] {
+            margin-right: 10px;
+            /* Hide default radio circle and replace with custom style on check */
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.2s;
+        }
+        .radio-options input[type="radio"]:checked {
+            border: 5px solid var(--seekivo-pink-primary);
+            background-color: #fff;
+        }
+        .radio-options label:hover {
+            border-color: var(--seekivo-pink-secondary);
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .results-container .result-output {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+
+        .results-container .recommendation {
+            font-size: 1.0em;
+            margin-top: 15px;
+            color: #777;
+            font-style: italic;
+        }
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header .nav-mobile {
+                display: none;
+                position: absolute;
+                top: 100%; 
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                flex-direction: column;
+                padding: 10px 0;
+                z-index: 100;
+            }
+
+            #menu-check:checked ~ .nav-mobile {
+                display: flex;
+            }
+            
+            .nav-mobile .nav-link, .nav-mobile .header-button {
+                margin: 5px 20px;
+                padding: 10px 0;
+                border: none;
+                background: none;
+                text-align: left;
+                width: auto;
+            }
+
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+            
+            .results-container .result-output {
+                font-size: 2.5em;
+            }
+
+            .radio-options label {
+                flex-basis: 100%; /* Single column on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        
+        <nav class="nav-mobile">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Life Expectancy Calculator</h1>
+            <p>Estimate your expected lifespan based on your age, habits, and lifestyle. Learn how choices affect your life expectancy.</p>
+
+            <form id="lifeExpectancyForm">
+                
+                <div class="input-group">
+                    <label for="currentAge">Current Age:</label>
+                    <input type="number" id="currentAge" min="1" max="120" placeholder="e.g., 35" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="gender">Gender at Birth:</label>
+                    <select id="gender" required>
+                        <option value="">-- Select --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Smoking Habits:</label>
+                    <div class="radio-options">
+                        <label for="smoke_no">
+                            <input type="radio" id="smoke_no" name="smoking" value="0" required> Non-Smoker
+                        </label>
+                        <label for="smoke_past">
+                            <input type="radio" id="smoke_past" name="smoking" value="-3"> Quit in Past
+                        </label>
+                        <label for="smoke_light">
+                            <input type="radio" id="smoke_light" name="smoking" value="-6"> Light Smoker
+                        </label>
+                        <label for="smoke_heavy">
+                            <input type="radio" id="smoke_heavy" name="smoking" value="-10"> Heavy Smoker
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Exercise Frequency (Per Week):</label>
+                    <div class="radio-options">
+                        <label for="ex_none">
+                            <input type="radio" id="ex_none" name="exercise" value="-4" required> None
+                        </label>
+                        <label for="ex_low">
+                            <input type="radio" id="ex_low" name="exercise" value="0"> 1-2 Times
+                        </label>
+                        <label for="ex_medium">
+                            <input type="radio" id="ex_medium" name="exercise" value="+3"> 3-5 Times
+                        </label>
+                        <label for="ex_high">
+                            <input type="radio" id="ex_high" name="exercise" value="+5"> 6+ Times
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Diet Quality (Fruits/Vegetables):</label>
+                    <div class="radio-options">
+                        <label for="diet_poor">
+                            <input type="radio" id="diet_poor" name="diet" value="-4" required> Poor (Rarely)
+                        </label>
+                        <label for="diet_average">
+                            <input type="radio" id="diet_average" name="diet" value="0"> Average (Some)
+                        </label>
+                        <label for="diet_good">
+                            <input type="radio" id="diet_good" name="diet" value="+3"> Good (Daily)
+                        </label>
+                        <label for="diet_excellent">
+                            <input type="radio" id="diet_excellent" name="diet" value="+5"> Excellent (5+ servings)
+                        </label>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="calculate-button">Calculate My Lifespan Estimate</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3>Estimated Life Expectancy:</h3>
+                <div class="result-output"><span id="outputAge">--</span> Years Old</div>
+                <p class="recommendation" id="outputRecommendation"></p>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('lifeExpectancyForm');
+        const resultsDiv = document.getElementById('results');
+        const outputAge = document.getElementById('outputAge');
+        const outputRecommendation = document.getElementById('outputRecommendation');
+        
+        // --- CALCULATION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentAge = parseInt(document.getElementById('currentAge').value);
+            const gender = document.getElementById('gender').value;
+            const smokingImpact = parseInt(document.querySelector('input[name="smoking"]:checked').value);
+            const exerciseImpact = parseInt(document.querySelector('input[name="exercise"]:checked').value);
+            const dietImpact = parseInt(document.querySelector('input[name="diet"]:checked').value);
+
+            // 1. BASELINE: Average global life expectancy (approx. 73) adjusted by gender
+            let baseLifeExpectancy;
+            if (gender === 'Male') {
+                baseLifeExpectancy = 71; // Slightly lower baseline for males
+            } else { // Female
+                baseLifeExpectancy = 75; // Slightly higher baseline for females
+            }
+            
+            // 2. ADJUSTMENTS based on lifestyle factors
+            let totalAdjustment = smokingImpact + exerciseImpact + dietImpact;
+            
+            // 3. APPLY adjustments
+            let estimatedLifespan = baseLifeExpectancy + totalAdjustment;
+
+            // 4. Ensure estimated lifespan is greater than current age
+            if (estimatedLifespan < currentAge) {
+                // Set a sensible minimum if current factors are very negative
+                estimatedLifespan = currentAge + 5; 
+            }
+
+            // 5. Generate Recommendation
+            let recommendationText = "Remember, this is an estimate. Maintaining a healthy lifestyle is key.";
+            if (totalAdjustment < 0) {
+                recommendationText = "Consider improving your exercise and diet habits to positively impact your future health.";
+            } else if (totalAdjustment > 5) {
+                recommendationText = "Your healthy habits are having a great positive effect! Keep it up.";
+            }
+
+            // Update Results
+            outputAge.textContent = Math.round(estimatedLifespan);
+            outputRecommendation.textContent = recommendationText;
+            
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
