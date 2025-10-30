@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+            --countdown-bg: #fff;
+            --countdown-border: #f0f0f0;
+        }
+
+        /* --- Header / Navigation Styling (Exact same as previous calculators) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 950px; /* Slightly wider for the countdown boxes */
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+        /* Flexbox for date and time inputs */
+        .input-row {
+            display: flex;
+            gap: 20px;
+        }
+        .input-row > div {
+            flex-grow: 1;
+        }
+
+        .input-group input[type="date"], 
+        .input-group input[type="time"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area - Countdown Display */
+        .results-container {
+            margin-top: 30px;
+            padding: 20px 0;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: var(--seekivo-pink-primary);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .countdown-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Allows wrapping on small screens */
+            padding: 0 10px;
+        }
+
+        .countdown-box {
+            background-color: var(--countdown-bg);
+            border: 1px solid var(--countdown-border);
+            border-radius: 10px;
+            padding: 15px 10px;
+            width: 120px; /* Fixed width for desktop/tablet */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex-grow: 1;
+            max-width: 200px;
+        }
+
+        .countdown-value {
+            font-size: 3em;
+            font-weight: 800;
+            color: #333;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--seekivo-pink-primary);
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header .nav-mobile {
+                display: none;
+                position: absolute;
+                top: 100%; 
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                flex-direction: column;
+                padding: 10px 0;
+                z-index: 100;
+            }
+
+            #menu-check:checked ~ .nav-mobile {
+                display: flex;
+            }
+            
+            .nav-mobile .nav-link, .nav-mobile .header-button {
+                margin: 5px 20px;
+                padding: 10px 0;
+                border: none;
+                background: none;
+                text-align: left;
+                width: auto;
+            }
+
+            /* Mobile Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+            
+            /* Inputs stacked on mobile */
+            .input-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            /* Countdown Boxes stack on mobile and take up full width */
+            .countdown-boxes {
+                gap: 10px;
+                padding: 0 5px;
+            }
+            .countdown-box {
+                flex-basis: calc(50% - 10px); /* Two boxes per row */
+                max-width: none;
+                padding: 10px 5px;
+            }
+            .countdown-value {
+                font-size: 2.2em; /* Smaller font for small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            <button class="header-button dark-mode-toggle" id="darkModeToggle">🌑 Dark Mode</button>
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        <nav class="nav">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+        <nav class="nav-mobile">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Countdown Timer</h1>
+            <p>Set a specific date and time to start a live countdown to your event.</p>
+
+            <form id="countdownForm">
+                <div class="input-group">
+                    <label for="targetDate">Target Date:</label>
+                    <input type="date" id="targetDate" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="targetTime">Target Time:</label>
+                    <input type="time" id="targetTime" value="00:00" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="eventName">Event Name (Optional):</label>
+                    <input type="text" id="eventName" placeholder="e.g., Birthday, Christmas, Deadline">
+                </div>
+
+                <button type="submit" class="calculate-button">Start Countdown</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3><span id="outputEventName">Your Event</span> Countdown:</h3>
+                
+                <div class="countdown-boxes">
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+                <p id="countdownMessage" style="margin-top: 20px; font-weight: 600; color: #555;"></p>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('countdownForm');
+        const resultsDiv = document.getElementById('results');
+        const outputEventName = document.getElementById('outputEventName');
+        const countdownMessage = document.getElementById('countdownMessage');
+
+        const daysOutput = document.getElementById('days');
+        const hoursOutput = document.getElementById('hours');
+        const minutesOutput = document.getElementById('minutes');
+        const secondsOutput = document.getElementById('seconds');
+        
+        let countdownInterval;
+
+        // --- CORE COUNTDOWN LOGIC ---
+        function startCountdown(targetDateTime) {
+            // Clear any previous interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            const targetDate = new Date(targetDateTime).getTime();
+
+            // Update the count down every 1 second
+            countdownInterval = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result
+                daysOutput.textContent = String(days).padStart(2, '0');
+                hoursOutput.textContent = String(hours).padStart(2, '0');
+                minutesOutput.textContent = String(minutes).padStart(2, '0');
+                secondsOutput.textContent = String(seconds).padStart(2, '0');
+                
+                countdownMessage.textContent = `Until: ${new Date(targetDateTime).toLocaleString()}`;
+
+
+                // If the countdown is finished (distance < 0)
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    daysOutput.textContent = hoursOutput.textContent = minutesOutput.textContent = secondsOutput.textContent = "00";
+                    countdownMessage.textContent = "The event has passed!";
+                    resultsDiv.style.backgroundColor = '#FF80AB'; // Change background color on completion
+                    resultsDiv.style.color = '#fff'; 
+                } else {
+                    resultsDiv.style.backgroundColor = '#ffeef2';
+                    resultsDiv.style.color = '#333';
+                }
+            }, 1000);
+        }
+
+        // --- FORM SUBMISSION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const targetDate = document.getElementById('targetDate').value;
+            const targetTime = document.getElementById('targetTime').value;
+            const eventName = document.getElementById('eventName').value || "Your Event";
+
+            if (!targetDate || !targetTime) {
+                alert("Please select both a target date and time.");
+                return;
+            }
+
+            // Combine date and time inputs into a single datetime string
+            const targetDateTimeString = `${targetDate}T${targetTime}:00`;
+            const targetDateTime = new Date(targetDateTimeString);
+
+            if (targetDateTime.toString() === "Invalid Date") {
+                 alert("Invalid date or time entered.");
+                 return;
+            }
+            
+            outputEventName.textContent = eventName;
+            resultsDiv.style.display = 'block';
+            startCountdown(targetDateTimeString);
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
