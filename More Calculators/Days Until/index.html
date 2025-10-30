@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- General Theme Styling --- */
+        /* --- General Theme & Variables --- */
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
@@ -16,7 +16,6 @@
             min-height: 100vh;
         }
 
-        /* Seekivo Primary Pink */
         :root {
             --seekivo-pink-primary: #D84F8D;
             --seekivo-pink-secondary: #FF80AB;
@@ -31,18 +30,19 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative; /* Needed for absolute menu positioning */
         }
         .header .logo {
             font-size: 24px;
             font-weight: 700;
             color: var(--seekivo-pink-primary);
         }
+        
+        /* Default Desktop Navigation */
         .header .nav {
             display: flex;
             align-items: center;
         }
-        
-        /* Navigation Links (Home / More Calculators) */
         .nav-link {
             margin-left: 30px;
             text-decoration: none;
@@ -53,8 +53,11 @@
         .nav-link:hover {
             color: var(--seekivo-pink-primary);
         }
-
-        /* Button Styling (Dark Mode / Home Button) */
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
         .header-button {
             display: inline-block;
             padding: 8px 15px;
@@ -66,35 +69,45 @@
             font-weight: 600;
             color: #555;
             transition: all 0.2s ease;
-            margin-left: 15px; /* Spacing between buttons */
+            margin-left: 15px;
         }
         .header-button:hover {
             background-color: #e0e0e0;
         }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
         
-        /* Optional: Highlighting the 'More Calculators' link as the current section */
-        .nav-link.active-page {
-            color: var(--seekivo-pink-primary);
-            border-bottom: 2px solid var(--seekivo-pink-primary);
-            padding-bottom: 5px;
+        /* --- Mobile Menu & Hamburger Icon --- */
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101; /* Above other content */
+        }
+        
+        /* Checkbox is hidden, used to control the menu state via CSS */
+        #menu-check {
+            display: none; 
         }
 
-
-        /* --- Main Content Layout --- */
+        /* --- Main Content Layout (Same as before) --- */
         .container {
             max-width: 800px;
             margin: 40px auto;
             padding: 0 20px;
         }
-
-        /* Calculator Card Styling */
         .calculator-card {
             background-color: #fff;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
         .calculator-card h1 {
             font-size: 2.5em;
             font-weight: 800;
@@ -104,19 +117,15 @@
             padding-bottom: 10px;
             text-align: center;
         }
-        
         .calculator-card p {
             font-size: 1.0em;
             color: #777;
             text-align: center;
             margin-bottom: 30px;
         }
-
-        /* Form / Input Styling */
         .input-group {
             margin-bottom: 25px;
         }
-
         .input-group label {
             display: block;
             font-weight: 700;
@@ -124,7 +133,6 @@
             color: #444;
             font-size: 1.1em;
         }
-
         .input-group input[type="date"], 
         .input-group input[type="text"] {
             width: 100%;
@@ -132,18 +140,9 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             font-size: 1.1em;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
             transition: border-color 0.2s ease;
         }
-        
-        .input-group input[type="date"]:focus,
-        .input-group input[type="text"]:focus {
-            border-color: var(--seekivo-pink-primary);
-            outline: none;
-            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
-        }
-
-        /* Calculate Button */
         .calculate-button {
             display: block;
             width: 100%;
@@ -155,51 +154,81 @@
             cursor: pointer;
             text-decoration: none;
             text-align: center;
-            
-            /* Glossy Gradient Pink Style */
             background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
             color: white;
             box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
             transition: all 0.2s ease-in-out;
         }
-        
         .calculate-button:hover {
             background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
             box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
             transform: translateY(-2px);
         }
-
-        /* Results Area */
         .results-container {
             margin-top: 30px;
             padding: 20px;
             border-radius: 10px;
-            background-color: #ffeef2; /* Lightest pink for background */
+            background-color: #ffeef2;
             text-align: center;
             border: 1px solid var(--seekivo-pink-light);
-            display: none; /* Hidden by default */
+            display: none;
         }
-
         .results-container h3 {
             color: var(--seekivo-pink-primary);
             font-size: 1.5em;
             margin-bottom: 10px;
         }
-
         .results-container .result-output {
             font-size: 2.5em;
             font-weight: 800;
             color: #333;
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
             .header {
                 padding: 15px 20px;
             }
+            /* 1. Hide the default desktop navigation */
             .header .nav {
-                display: none; /* Hide navigation links on small screens to save space */
+                display: none; 
             }
+            /* 2. Show the hamburger icon */
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* 3. Style the mobile menu container (hidden by default) */
+            .header .nav-mobile {
+                display: none;
+                position: absolute;
+                top: 100%; /* Position right below the header */
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-top: 1px solid #eee;
+                flex-direction: column;
+                padding: 10px 0;
+                z-index: 100;
+            }
+
+            /* 4. Display the mobile menu when the hidden checkbox is checked */
+            #menu-check:checked ~ .nav-mobile {
+                display: flex;
+            }
+            
+            /* 5. Style the links inside the mobile menu */
+            .nav-mobile .nav-link, .nav-mobile .header-button {
+                margin: 5px 20px;
+                padding: 10px 0;
+                border: none; /* Remove button borders in the mobile list */
+                background: none;
+                text-align: left;
+                width: auto;
+            }
+
+            /* Main Content Adjustments */
             .container {
                 margin: 20px 0;
             }
@@ -211,50 +240,31 @@
                 font-size: 1.8em;
             }
         }
-        
-        /* Basic styles for a general header button (like the Dark Mode toggle) */
-.header-button {
-    /* Visual appearance */
-    display: inline-block;
-    padding: 8px 15px; /* Padding inside the button */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 20px; /* Rounded corners */
-    cursor: pointer;
-    background-color: #f0f0f0; /* Light background for contrast */
-    text-decoration: none; /* Remove underline */
-    font-weight: 600;
-    
-    /* Text color and transition */
-    color: #555; /* Default text color */
-    transition: all 0.2s ease;
-}
-
-/* Hover state for interaction */
-.header-button:hover {
-    background-color: #e0e0e0; /* Slightly darker background on hover */
-    border-color: #ccc; /* Slightly darker border on hover */
-    color: #333; /* Darker text */
-}
-
-/* Specific styling for the 'Home' button, making it stand out */
-.home-button {
-    margin-right: 15px; /* Add some space if placed near other links */
-    /* You can give the Home button a unique look if it's the main call-to-action: */
-    /* background-color: #D84F8D;  
-    color: white; 
-    border-color: #D84F8D; */
-}
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+            <button class="header-button dark-mode-toggle" id="darkModeToggle">🌑 Dark Mode</button>
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
         <nav class="nav">
             <a href="/" class="header-button home-button">Home</a> 
-            
+            <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
+            </nav>
+        
+        <nav class="nav-mobile">
+            <a href="/" class="header-button home-button">Home</a> 
             <a href="/more-calculators.html" class="nav-link active-page">More Calculators</a>
         </nav>
+        
     </header>
 
     <main class="container">
@@ -341,17 +351,16 @@
                 const years = Math.floor(days / 365.25);
                 const remainingDays = days % 365.25;
                 const months = Math.floor(remainingDays / 30.44);
-                const weeks = Math.floor(remainingDays / 7);
+                const weeks = Math.floor(days / 7);
                 
-                let breakdown = "";
+                let breakdown = `(${weeks} Week${weeks !== 1 ? 's' : ''}, `;
+                
                 if (years >= 1) {
-                    breakdown += `${years} year${years !== 1 ? 's' : ''}, `;
-                    breakdown += `${months} month${months !== 1 ? 's' : ''}, `;
-                    breakdown += `${Math.floor((remainingDays - (months * 30.44)))} day${Math.floor((remainingDays - (months * 30.44))) !== 1 ? 's' : ''}`;
-                } else if (weeks >= 1) {
-                    breakdown = `${weeks} week${weeks !== 1 ? 's' : ''}, ${days % 7} day${(days % 7) !== 1 ? 's' : ''}`;
+                    breakdown = `Approx: ${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
+                } else if (months >= 1) {
+                    breakdown = `Approx: ${months} month${months !== 1 ? 's' : ''}, ${days % 30} day${(days % 30) !== 1 ? 's' : ''}`;
                 } else {
-                    breakdown = "Time is running out!";
+                    breakdown = `${weeks} Week${weeks !== 1 ? 's' : ''}, ${days % 7} day${(days % 7) !== 1 ? 's' : ''}`;
                 }
                 outputBreakdown.textContent = breakdown;
             }
@@ -368,10 +377,8 @@
             } else {
                 darkModeToggle.textContent = '🌑 Dark Mode';
             }
-            // Real dark mode would require much more CSS toggling 
         });
     </script>
 
 </body>
-
 </html>
