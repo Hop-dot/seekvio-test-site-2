@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown Calculator - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+
+        .input-group input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-group input[type="date"]:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Countdown Grid */
+        .countdown-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        .time-box {
+            flex-basis: calc(33% - 15px); /* 3 columns on desktop */
+            min-width: 100px;
+            background-color: #fff;
+            padding: 15px 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .time-box .value {
+            font-size: 3.0em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+        .time-box .unit {
+            font-size: 1.0em;
+            color: #777;
+            margin-top: -5px;
+            display: block;
+        }
+        
+        .celebration-message {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--seekivo-pink-light);
+            border-radius: 10px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            /* ... (Navigation and layout mobile styles are consistent) ... */
+
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+
+            /* Countdown grid stacked on mobile */
+            .countdown-grid {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .time-box {
+                flex-basis: 100%; /* Full width on mobile */
+                min-width: 100%;
+            }
+            .time-box .value {
+                font-size: 2.5em; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+        
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        
+        <nav class="nav-mobile">
+            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
+            <a href="https://seekivo.online/more%20calculators/" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Birthday Countdown Calculator</h1>
+            <p>Count the exact days, hours, and minutes left until your next birthday — celebrate with precision!</p>
+
+            <form id="birthdayForm">
+                <div class="input-group">
+                    <label for="birthDate">Your Date of Birth:</label>
+                    <input type="date" id="birthDate" required>
+                </div>
+
+                <button type="submit" class="calculate-button">Start Countdown</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3 id="currentAgeDisplay"></h3>
+                
+                <div class="countdown-grid">
+                    <div class="time-box">
+                        <div class="value" id="daysLeft">--</div>
+                        <span class="unit">Days</span>
+                    </div>
+                    <div class="time-box">
+                        <div class="value" id="hoursLeft">--</div>
+                        <span class="unit">Hours</span>
+                    </div>
+                    <div class="time-box">
+                        <div class="value" id="minutesLeft">--</div>
+                        <span class="unit">Minutes</span>
+                    </div>
+                </div>
+                
+                <p class="celebration-message" id="message">Enter your date of birth to start the countdown!</p>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('birthdayForm');
+        const resultsDiv = document.getElementById('results');
+        const currentAgeDisplay = document.getElementById('currentAgeDisplay');
+        const daysLeftOutput = document.getElementById('daysLeft');
+        const hoursLeftOutput = document.getElementById('hoursLeft');
+        const minutesLeftOutput = document.getElementById('minutesLeft');
+        const messageOutput = document.getElementById('message');
+        
+        let countdownInterval;
+
+        // --- Core Countdown Logic ---
+        function startCountdown(birthDateString) {
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Extract Month and Day from birth date
+            const birthMonthDay = new Date(birthDateString);
+            const birthMonth = birthMonthDay.getMonth();
+            const birthDay = birthMonthDay.getDate();
+            const birthYear = birthMonthDay.getFullYear();
+
+            const updateCountdown = () => {
+                const now = new Date();
+
+                // 1. Determine the Next Birthday Date
+                let nextBirthday = new Date(now.getFullYear(), birthMonth, birthDay);
+
+                // If birthday has already passed this year, set it for next year
+                if (nextBirthday.getTime() < now.getTime()) {
+                    nextBirthday.setFullYear(now.getFullYear() + 1);
+                }
+
+                // Handle leap year case for Feb 29 (will celebrate on Mar 1 if not a leap year)
+                if (birthMonth === 1 && birthDay === 29 && nextBirthday.getMonth() === 2 && nextBirthday.getDate() === 1) {
+                    // Check if the calculated next birthday year is NOT a leap year
+                    if (nextBirthday.getFullYear() % 4 !== 0) {
+                        // The user's birthday is Feb 29, but nextBirthday is March 1 (non-leap year)
+                        // This calculation is fine; the age will be accurate.
+                    }
+                }
+
+                // 2. Calculate the difference
+                const diffTimeMs = nextBirthday.getTime() - now.getTime();
+                
+                if (diffTimeMs <= 0) {
+                    // Birthday is today!
+                    clearInterval(countdownInterval);
+                    daysLeftOutput.textContent = hoursLeftOutput.textContent = minutesLeftOutput.textContent = "0";
+                    messageOutput.textContent = "🥳 Happy Birthday! Enjoy your day!";
+                    resultsDiv.style.backgroundColor = 'var(--seekivo-pink-secondary)';
+                    
+                } else {
+                    // 3. Calculate time components
+                    resultsDiv.style.backgroundColor = '#ffeef2';
+                    
+                    const MS_IN_MINUTE = 1000 * 60;
+                    const MS_IN_HOUR = MS_IN_MINUTE * 60;
+                    const MS_IN_DAY = MS_IN_HOUR * 24;
+
+                    const days = Math.floor(diffTimeMs / MS_IN_DAY);
+                    
+                    // Remaining time after removing full days
+                    let remainder = diffTimeMs % MS_IN_DAY;
+
+                    const hours = Math.floor(remainder / MS_IN_HOUR);
+                    
+                    // Remaining time after removing full hours
+                    remainder = remainder % MS_IN_HOUR;
+
+                    const minutes = Math.floor(remainder / MS_IN_MINUTE);
+                    
+                    // 4. Update Age Display
+                    const nextAge = nextBirthday.getFullYear() - birthYear;
+                    const currentAge = nextAge - 1;
+                    currentAgeDisplay.textContent = `You are currently ${currentAge} years old. Counting down to your ${nextAge}th Birthday!`;
+                    
+                    // 5. Update Countdown Outputs
+                    daysLeftOutput.textContent = days;
+                    hoursLeftOutput.textContent = hours.toString().padStart(2, '0');
+                    minutesLeftOutput.textContent = minutes.toString().padStart(2, '0');
+                    messageOutput.textContent = `Your next birthday is on ${nextBirthday.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+                }
+            };
+
+            // Run immediately and then every minute (for simplicity/performance)
+            updateCountdown(); 
+            countdownInterval = setInterval(updateCountdown, 60000); 
+        }
+
+        // --- FORM SUBMISSION LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const birthDateInput = document.getElementById('birthDate').value;
+
+            if (!birthDateInput) {
+                alert("Please select your date of birth.");
+                return;
+            }
+
+            // Add T00:00:00 to treat input dates as the start of the day
+            const birthDate = `${birthDateInput}T00:00:00`;
+            const startDate = new Date(birthDate);
+
+            if (startDate.toString() === "Invalid Date" || startDate.getTime() >= new Date().getTime()) {
+                 alert("Please enter a valid date in the past.");
+                 resultsDiv.style.display = 'none';
+                 return;
+            }
+
+            startCountdown(birthDate);
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
