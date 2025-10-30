@@ -183,10 +183,52 @@
                 font-size: 1em;
             }
         }
+
+        /* Basic styles for the navigation links */
+.nav-link {
+    /* General link styling */
+    margin-left: 30px;
+    text-decoration: none;
+    color: #555; /* Default text color (e.g., gray/dark gray) */
+    font-weight: 600; /* Semi-bold */
+    padding: 5px 0; /* Vertical padding for click area */
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+/* Hover state: changes color to your primary pink */
+.nav-link:hover {
+    color: #D84F8D; /* Seekivo primary pink */
+}
+
+/* Optional: Add a subtle underline on hover for better visual feedback */
+.nav-link:hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #FF80AB; /* Light pink underline */
+    transform: scaleX(0.8); /* Keep it slightly shorter than the text width */
+    transform-origin: bottom center;
+}
+
+/* Style for the currently active link (e.g., if you are on the Home page) */
+.nav-link.active, .nav-link.home-link {
+    color: #D84F8D; /* Always show active link in pink */
+}
+
+/* Ensure the Home link (or any active link) has the pink color */
+.home-link {
+    color: #D84F8D;
+}
     </style>
 </head>
 <body>
-
+    <br>
+<a href="/" class="nav-link home-link">Home</a>
+     </br>
     <div class="main-container">
         <section class="hero-section">
             <h1>Essential Calculators</h1>
@@ -239,4 +281,5 @@
     </div>
 
 </body>
+
 </html>
