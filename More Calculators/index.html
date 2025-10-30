@@ -184,55 +184,50 @@
             }
         }
 
-        /* Basic styles for the navigation links */
-.nav-link {
-    /* General link styling */
-    margin-left: 30px;
-    text-decoration: none;
-    color: #555; /* Default text color (e.g., gray/dark gray) */
-    font-weight: 600; /* Semi-bold */
-    padding: 5px 0; /* Vertical padding for click area */
-    position: relative;
-    transition: color 0.2s ease;
+/* Basic styles for a general header button (like the Dark Mode toggle) */
+.header-button {
+    /* Visual appearance */
+    display: inline-block;
+    padding: 8px 15px; /* Padding inside the button */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer;
+    background-color: #f0f0f0; /* Light background for contrast */
+    text-decoration: none; /* Remove underline */
+    font-weight: 600;
+    
+    /* Text color and transition */
+    color: #555; /* Default text color */
+    transition: all 0.2s ease;
 }
 
-/* Hover state: changes color to your primary pink */
-.nav-link:hover {
-    color: #D84F8D; /* Seekivo primary pink */
+/* Hover state for interaction */
+.header-button:hover {
+    background-color: #e0e0e0; /* Slightly darker background on hover */
+    border-color: #ccc; /* Slightly darker border on hover */
+    color: #333; /* Darker text */
 }
 
-/* Optional: Add a subtle underline on hover for better visual feedback */
-.nav-link:hover::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #FF80AB; /* Light pink underline */
-    transform: scaleX(0.8); /* Keep it slightly shorter than the text width */
-    transform-origin: bottom center;
-}
-
-/* Style for the currently active link (e.g., if you are on the Home page) */
-.nav-link.active, .nav-link.home-link {
-    color: #D84F8D; /* Always show active link in pink */
-}
-
-/* Ensure the Home link (or any active link) has the pink color */
-.home-link {
-    color: #D84F8D;
+/* Specific styling for the 'Home' button, making it stand out */
+.home-button {
+    margin-right: 15px; /* Add some space if placed near other links */
+    /* You can give the Home button a unique look if it's the main call-to-action: */
+    /* background-color: #D84F8D;  
+    color: white; 
+    border-color: #D84F8D; */
 }
     </style>
 </head>
 <body>
-    <br>
-<a href="/" class="nav-link home-link">Home</a>
-     </br>
+
     <div class="main-container">
         <section class="hero-section">
-            <h1>Essential Calculators</h1>
-            <p>Your toolkit for dates, time, and more.</p>
+
+             <br>
+<a href="/" class="header-button home-button">Home</a>
+     </br>
+            <h1>More Calculators</h1>
+            <p>Your toolkit for dates, time & more!</p>
         </section>
 
         <section class="calculator-grid">
@@ -283,3 +278,4 @@
 </body>
 
 </html>
+
