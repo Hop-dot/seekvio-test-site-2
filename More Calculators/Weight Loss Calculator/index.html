@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Loss Goal Calculator - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Calculator Card Styling */
+        .calculator-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calculator-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .calculator-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* Form / Input Styling */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 1.1em;
+        }
+
+        /* Input/Select Styling */
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--seekivo-pink-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(216, 79, 141, 0.3);
+        }
+
+        /* Input Row for side-by-side inputs */
+        .input-row {
+            display: flex;
+            gap: 20px;
+        }
+        .input-row > div {
+            flex-grow: 1;
+        }
+
+        /* Calculate Button */
+        .calculate-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(to right, var(--seekivo-pink-secondary), var(--seekivo-pink-light));
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease-in-out;
+            margin-top: 30px;
+        }
+        
+        .calculate-button:hover {
+            background: linear-gradient(to right, var(--seekivo-pink-primary), var(--seekivo-pink-secondary));
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Results Area */
+        .results-container {
+            margin-top: 30px;
+            padding: 30px 20px;
+            border-radius: 10px;
+            background-color: #ffeef2;
+            text-align: center;
+            border: 1px solid var(--seekivo-pink-light);
+            display: none; /* Hidden by default */
+        }
+
+        .results-container h3 {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .results-output {
+            font-size: 4.0em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            line-height: 1.2;
+        }
+        
+        .results-output .unit {
+            font-size: 0.5em;
+            font-weight: 600;
+            color: #555;
+            display: block;
+        }
+        
+        .info-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: var(--seekivo-pink-light);
+            border-radius: 10px;
+            font-size: 0.95em;
+            text-align: left;
+            color: #333;
+        }
+
+        
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* ... (Navigation mobile styles are consistent) ... */
+
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .calculator-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .calculator-card h1 {
+                font-size: 1.8em;
+            }
+
+            /* Inputs stacked on mobile */
+            .input-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .results-output {
+                font-size: 3.0em; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+           
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+       
+        
+        <nav class="nav-mobile">
+            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
+            <a href="https://seekivo.online/more%20calculators/" class="nav-link active-page">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="calculator-card">
+            <h1>Weight Loss Goal Calculator</h1>
+            <p>Estimate weeks until you achieve your goal. Tailor to your age, gender, and activity level (using Metric Units: kg, cm).</p>
+
+            <form id="weightLossForm">
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="currentWeight">Current Weight (kg):</label>
+                        <input type="number" id="currentWeight" min="30" max="300" step="0.1" placeholder="e.g., 80" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="goalWeight">Goal Weight (kg):</label>
+                        <input type="number" id="goalWeight" min="30" max="300" step="0.1" placeholder="e.g., 70" required>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="age">Age (years):</label>
+                        <input type="number" id="age" min="15" max="100" placeholder="e.g., 30" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="height">Height (cm):</label>
+                        <input type="number" id="height" min="100" max="250" step="0.1" placeholder="e.g., 175" required>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" required>
+                            <option value="">-- Select --</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="deficit">Target Daily Calorie Deficit (cal):</label>
+                        <input type="number" id="deficit" min="250" max="1000" step="50" value="500" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="activity">Activity Level:</label>
+                    <select id="activity" required>
+                        <option value="">-- Select Activity Level --</option>
+                        <option value="1.2">Sedentary (little to no exercise)</option>
+                        <option value="1.375">Lightly Active (light exercise/sports 1-3 days/week)</option>
+                        <option value="1.55">Moderately Active (moderate exercise/sports 3-5 days/week</option>
+                        <option value="1.725">Very Active (hard exercise/sports 6-7 days a week)</option>
+                        <option value="1.9">Extra Active (very hard exercise/physical job)</option>
+                    </select>
+                </div>
+
+
+                <button type="submit" class="calculate-button">Estimate Time to Goal</button>
+            </form>
+
+            <div id="results" class="results-container">
+                <h3>Estimated Time to Goal:</h3>
+                
+                <div class="results-output"><span id="outputWeeks">--</span> <span class="unit">Weeks</span></div>
+                
+                <div class="info-section">
+                    <p><strong>Total Weight Loss Needed:</strong> <span id="outputLossKg">--</span> kg</p>
+                    <p><strong>Maintenance Calories (TDEE):</strong> <span id="outputTDEE">--</span> cal/day</p>
+                    <p><strong>Target Daily Calorie Intake:</strong> <span id="outputTargetCal">--</span> cal/day</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        const form = document.getElementById('weightLossForm');
+        const resultsDiv = document.getElementById('results');
+        const outputWeeks = document.getElementById('outputWeeks');
+        const outputLossKg = document.getElementById('outputLossKg');
+        const outputTDEE = document.getElementById('outputTDEE');
+        const outputTargetCal = document.getElementById('outputTargetCal');
+        
+        // --- CALCULATION HELPER (Mifflin-St Jeor Equation) ---
+        function calculateBMR(weight, height, age, gender) {
+            let bmr;
+            // Mifflin-St Jeor Equation (Metric):
+            bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            
+            if (gender === 'male') {
+                bmr += 5;
+            } else { // female
+                bmr -= 161;
+            }
+            return bmr;
+        }
+
+        // --- CORE WEIGHT LOSS LOGIC ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentWeight = parseFloat(document.getElementById('currentWeight').value);
+            const goalWeight = parseFloat(document.getElementById('goalWeight').value);
+            const age = parseFloat(document.getElementById('age').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const gender = document.getElementById('gender').value;
+            const deficit = parseFloat(document.getElementById('deficit').value);
+            const activityFactor = parseFloat(document.getElementById('activity').value);
+
+            if (currentWeight <= goalWeight) {
+                alert("Your current weight must be greater than your goal weight.");
+                resultsDiv.style.display = 'none';
+                return;
+            }
+            
+            if (isNaN(currentWeight) || isNaN(goalWeight) || isNaN(age) || isNaN(height) || !gender || isNaN(deficit) || isNaN(activityFactor)) {
+                alert("Please ensure all fields are filled correctly.");
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            // 1. Calculate TDEE (Maintenance Calories)
+            const bmr = calculateBMR(currentWeight, height, age, gender);
+            const tdee = Math.round(bmr * activityFactor);
+            
+            // 2. Calculate Total Weight to Lose
+            const totalLossKg = currentWeight - goalWeight;
+            
+            // 3. Convert Weight to Calories
+            // 1 kg of body fat is approx 7700 calories
+            const CALORIES_PER_KG = 7700;
+            const totalCaloriesToLose = totalLossKg * CALORIES_PER_KG;
+            
+            // 4. Calculate Days/Weeks needed
+            // Time (days) = Total Calories To Lose / Daily Deficit
+            const daysToGoal = totalCaloriesToLose / deficit;
+            const weeksToGoal = daysToGoal / 7;
+
+            // 5. Calculate Target Daily Calorie Intake
+            const targetCalorieIntake = Math.round(tdee - deficit);
+            
+            // Final check against minimum safe calorie levels
+            let finalTargetCal;
+            if (gender === 'female' && targetCalorieIntake < 1200) {
+                 finalTargetCal = 1200;
+            } else if (gender === 'male' && targetCalorieIntake < 1500) {
+                 finalTargetCal = 1500;
+            } else {
+                 finalTargetCal = targetCalorieIntake;
+            }
+
+            // Update Results
+            outputWeeks.textContent = weeksToGoal > 0 ? weeksToGoal.toFixed(1) : "0.0";
+            outputLossKg.textContent = totalLossKg.toFixed(1);
+            outputTDEE.textContent = tdee.toLocaleString();
+            outputTargetCal.textContent = finalTargetCal.toLocaleString();
+            
+            resultsDiv.style.display = 'block';
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
