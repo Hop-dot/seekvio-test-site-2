@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Frequently Asked Questions - Seekivo</title>
-    <meta name="description" content="❓ Find quick answers about how our tools work, data accuracy, and site usage." />
+    <title>General Knowledge Quiz - Seekivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Using Tailwind JIT for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* --- General Theme & Variables --- */
         body {
@@ -14,13 +16,25 @@
             background-color: #fcebeb; /* Light pink background */
             color: #333;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         :root {
             --seekivo-pink-primary: #D84F8D;
             --seekivo-pink-secondary: #FF80AB;
             --seekivo-pink-light: #FFC1E3;
+            --seekivo-pink-dark: #A83A6D;
         }
+
+        /* Utility Styles (Fallback/Custom) */
+        .shadow-pink-xl {
+            box-shadow: 0 10px 30px rgba(216, 79, 141, 0.25);
+        }
+        .text-seekivo-primary { color: var(--seekivo-pink-primary); }
+        .bg-seekivo-primary { background-color: var(--seekivo-pink-primary); }
+        .hover\:bg-seekivo-dark:hover { background-color: var(--seekivo-pink-dark); }
+        .border-seekivo-primary { border-color: var(--seekivo-pink-primary); }
 
         /* --- Header / Navigation Styling (Consistent Layout) --- */
         .header {
@@ -30,12 +44,12 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            position: relative;
         }
         .header .logo {
             font-size: 24px;
             font-weight: 700;
             color: var(--seekivo-pink-primary);
+            text-decoration: none;
         }
         .header .nav {
             display: flex;
@@ -72,130 +86,180 @@
         .header-button:hover {
             background-color: #e0e0e0;
         }
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
-        
-        /* Mobile Menu & Hamburger Icon */
-        .menu-toggle {
-            display: none; 
-            font-size: 1.8em;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #555;
-            margin-left: 15px;
-            z-index: 101;
-        }
-        #menu-check {
-            display: none; 
-        }
+        .menu-toggle { display: none; }
+        #menu-check { display: none; }
+        .header-right { display: flex; align-items: center; }
+
 
         /* --- Main Content Layout --- */
-        .container {
-            max-width: 900px;
+        .main-container {
+            max-width: 700px;
             margin: 40px auto;
             padding: 0 20px;
+            flex-grow: 1;
         }
 
-        /* Content Card Styling */
-        .content-card {
+        /* Quiz Card Styling */
+        .quiz-card {
             background-color: #fff;
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .content-card h1 {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: var(--seekivo-pink-primary);
-            margin-bottom: 5px;
-            border-bottom: 2px solid var(--seekivo-pink-light);
-            padding-bottom: 10px;
-            text-align: center;
-        }
-        
-        .content-card p {
-            font-size: 1.0em;
-            color: #777;
-            text-align: center;
-            margin-bottom: 30px; 
-        }
-
-        /* --- FAQ Accordion Styles --- */
-        .faq-accordion {
-            border: 1px solid var(--seekivo-pink-light);
-            border-radius: 10px;
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
             overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--seekivo-pink-secondary);
+            transition: width 0.3s ease;
         }
 
-        .accordion-item {
-            border-bottom: 1px solid var(--seekivo-pink-light);
-        }
-        .accordion-item:last-child {
-            border-bottom: none;
-        }
-
-        .accordion-header {
-            background-color: #fcebeb; /* Light pink background for question */
-            padding: 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s;
-        }
-        .accordion-header:hover {
-            background-color: var(--seekivo-pink-light);
-        }
-
-        .accordion-header h3 {
-            margin: 0;
-            font-size: 1.1em;
+        /* Question and Options */
+        .question-text {
+            font-size: 1.25em;
             font-weight: 700;
             color: #444;
+            margin-bottom: 20px;
         }
 
-        .accordion-icon {
-            font-size: 1.5em;
-            color: var(--seekivo-pink-primary);
-            transition: transform 0.3s ease;
-        }
-
-        .accordion-content {
-            background-color: #fff;
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-            color: #666;
-            line-height: 1.6;
-        }
-        .accordion-content p {
-            padding: 15px 0;
-            margin: 0;
+        .option-button {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            background-color: #fcebeb; /* Very light pink/off-white */
+            border: 2px solid var(--seekivo-pink-light);
             text-align: left;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #555;
+        }
+        .option-button:hover:not([disabled]) {
+            background-color: var(--seekivo-pink-light);
+            border-color: var(--seekivo-pink-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Disabled/Selected State */
+        .option-button[disabled] {
+            cursor: default;
+        }
+
+        .correct-answer {
+            background-color: #d4edda !important; /* Green for correct */
+            border-color: #28a745 !important;
+            color: #155724;
+            transform: none !important;
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da !important; /* Red for incorrect */
+            border-color: #dc3545 !important;
+            color: #721c24;
+            animation: shake 0.5s;
+            transform: none !important;
         }
         
-        /* Active State */
-        .accordion-item.active .accordion-header {
-            background-color: var(--seekivo-pink-secondary);
-        }
-        .accordion-item.active .accordion-header h3 {
-            color: white;
-        }
-        .accordion-item.active .accordion-icon {
-            transform: rotate(45deg); /* Change icon to X or - */
-            color: white;
-        }
-        .accordion-item.active .accordion-content {
-            max-height: 500px; /* Large enough value to cover content */
-            padding: 0 20px 20px 20px;
+        /* Rationale Styles */
+        .rationale {
+            margin-top: 5px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #444;
+            border-left: 4px solid var(--seekivo-pink-secondary);
+            background-color: #fff;
+            line-height: 1.4;
+            margin-bottom: 15px;
         }
 
-        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        /* Navigation Buttons */
+        .nav-buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .quiz-nav-button {
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        /* Next/Submit Button */
+        #nextButton {
+            background-color: var(--seekivo-pink-primary);
+            color: white;
+        }
+        #nextButton:hover:not([disabled]) {
+            background-color: var(--seekivo-pink-dark);
+            transform: scale(1.02);
+        }
+        #nextButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Finish/View Results Button */
+        #finishButton {
+            background-color: #4CAF50; /* Green finish button */
+            color: white;
+            display: none;
+        }
+        #finishButton:hover:not([disabled]) {
+            background-color: #388E3C;
+            transform: scale(1.02);
+        }
+        
+        /* Results Screen */
+        .results-container h2 {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 10px;
+        }
+        .results-container p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .score-display {
+            font-size: 3em;
+            font-weight: 900;
+            color: #4CAF50; /* Green for score */
+            margin: 20px 0;
+            display: inline-block;
+            padding: 20px;
+            border: 5px solid #4CAF50;
+            border-radius: 50%;
+            background-color: #f7fff7;
+        }
+        .review-button {
+            background-color: var(--seekivo-pink-primary);
+            color: white;
+            margin-top: 20px;
+        }
+        .review-button:hover {
+            background-color: var(--seekivo-pink-dark);
+        }
+
+        /* Utility for Hiding/Showing Screens */
+        .hidden { display: none; }
+        
+        /* Mobile adjustments */
         @media (max-width: 768px) {
             .header {
                 padding: 15px 20px;
@@ -206,30 +270,27 @@
             .menu-toggle {
                 display: block;
             }
-            
-            /* Main Content Adjustments */
-            .container {
+            .main-container {
                 margin: 20px 0;
             }
-            .content-card {
+            .quiz-card {
                 padding: 20px;
                 border-radius: 10px;
             }
-            .content-card h1 {
-                font-size: 1.8em;
+            .question-text {
+                font-size: 1.1em;
             }
-            
-            .accordion-header {
-                padding: 15px;
-            }
-            .accordion-header h3 {
+            .option-button {
+                padding: 12px 15px;
                 font-size: 1.0em;
             }
-            .accordion-content {
-                padding: 0 15px;
+            .nav-buttons-container {
+                flex-direction: column;
+                gap: 10px;
             }
-            .accordion-item.active .accordion-content {
-                padding: 0 15px 15px 15px;
+            .quiz-nav-button {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -237,119 +298,454 @@
 <body>
 
     <header class="header">
-        <div class="logo">Seekivo</div>
-        
-        <input type="checkbox" id="menu-check">
-        
+        <a href="/" class="logo">Seekivo</a>
         <div class="header-right">
-          
-            
-            <label for="menu-check" class="menu-toggle">☰</label>
+            <!-- Dark Mode Toggle (Placeholder) -->
+            <button class="header-button dark-mode-toggle">🌑 Dark Mode</button>
         </div>
         
-        <nav class="nav-mobile">
-            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
-            <a href="https://seekivo.online/essential%20tools/" class="nav-link">More Calculators</a>
+        <!-- DESKTOP NAVIGATION -->
+        <nav class="nav">
+            <a href="/" class="header-button home-button">Home</a> 
+            <a href="/more-calculators.html" class="nav-link">More Calculators</a>
+            <a href="/faq.html" class="nav-link">FAQ</a>
         </nav>
-        
     </header>
 
-    <main class="container">
-        <div class="content-card">
-            <h1>Frequently Asked Questions</h1>
-            <p>Find quick answers about how our tools work, data accuracy, and site usage.</p>
+    <main class="main-container">
+        
+        <div id="quizScreen" class="quiz-card shadow-pink-xl">
+            <h1 class="text-2xl font-extrabold mb-4 text-center text-seekivo-primary">General Knowledge Challenge (20 Questions)</h1>
 
-            <div class="faq-accordion" id="faqAccordion">
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
 
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        <h3>How do your date calculators handle Leap Years?</h3>
-                        <span class="accordion-icon">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>All of our date-based tools (like Days Until, Age Difference, and Event Duration) automatically account for leap years (e.g., 2024, 2028). The calculations are precise to the day, ensuring accuracy regardless of the starting or ending year.</p>
-                    </div>
+            <div class="flex justify-between text-sm font-semibold mb-6">
+                <span id="questionCount" class="text-seekivo-primary">Question 1 of 20</span>
+                <span id="currentScore" class="text-gray-600">Score: 0</span>
+            </div>
+            
+            <!-- Question Content Area -->
+            <div id="questionContainer">
+                <p id="currentQuestion" class="question-text"></p>
+                <div id="optionsContainer" class="space-y-3">
+                    <!-- Options will be dynamically inserted here -->
                 </div>
+                <div id="rationaleContainer">
+                    <!-- Rationale will be dynamically inserted here -->
+                </div>
+            </div>
 
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        <h3>Are your health and fitness calculators medically accurate?</h3>
-                        <span class="accordion-icon">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>Our health and fitness tools (like the Weight Loss Goal Calculator) are based on widely accepted scientific formulas (e.g., TDEE, BMR). **However, they are for informational purposes only and are not a substitute for professional medical advice.** Always consult with a doctor or certified nutritionist before starting any diet or fitness program.</p>
-                    </div>
-                </div>
-
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        <h3>Do you store any of the dates or personal information I enter?</h3>
-                        <span class="accordion-icon">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>No. All calculations are performed instantly on your device using client-side JavaScript. We do not store, track, or record any of the dates, times, weights, or other personal data you enter into our calculators.</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        <h3>How does the Sleep Time Calculator determine the best times?</h3>
-                        <span class="accordion-icon">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>The Sleep Time Calculator uses the natural sleep cycle theory, where one cycle lasts approximately 90 minutes. The tool calculates times that allow you to wake up at the *end* of a 90-minute cycle, minimizing grogginess. It also adds an average of 14 minutes for the time it takes to fall asleep.</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        <h3>What if I find a bug or have a suggestion for a new tool?</h3>
-                        <span class="accordion-icon">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>We welcome your feedback! While we don't have a contact form on this static template yet, we encourage you to check back for updates. We are constantly improving our tools and adding new utilities based on user requests.</p>
-                    </div>
-                </div>
-
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons-container">
+                <button id="nextButton" class="quiz-nav-button" disabled>Next Question</button>
+                <button id="finishButton" class="quiz-nav-button">View Results</button>
             </div>
         </div>
+        
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="quiz-card hidden text-center shadow-pink-xl">
+            <h2 class="text-4xl font-extrabold">Quiz Complete!</h2>
+            <p>You finished the Seekivo General Knowledge Challenge.</p>
+            <div class="score-display" id="finalScoreDisplay">0/20</div>
+            <p id="scoreMessage" class="text-xl font-semibold mt-4 text-gray-700"></p>
+            <button id="retakeButton" class="quiz-nav-button review-button">Retake Quiz</button>
+        </div>
+
     </main>
 
-    
     <script>
-        // --- ACCORDION FUNCTIONALITY ---
-        const accordionItems = document.querySelectorAll('.accordion-item');
+        // Data for the 20-Question Quiz
+        const quizData = [
+            {
+                question: "Which country is the largest producer of saffron, the world's most expensive spice?",
+                options: [
+                    { text: "India", isCorrect: false, rationale: "While India produces saffron, Iran is recognized as the world's largest producer by volume." },
+                    { text: "Spain", isCorrect: false, rationale: "Spain is a major consumer and exporter, but not the largest grower." },
+                    { text: "Iran", isCorrect: true, rationale: "Iran accounts for over 90% of the world's saffron production, making it the dominant global source." },
+                    { text: "Greece", isCorrect: false, rationale: "Greece is known for its red saffron (Krokos Kozanis) but is not the largest producer." }
+                ],
+                hint: "This country is located in the Middle East and is historically linked to Persian culture."
+            },
+            {
+                question: "What is the capital city of Mongolia?",
+                options: [
+                    { text: "Astana", isCorrect: false, rationale: "Astana (now Nur-Sultan) is the capital of Kazakhstan." },
+                    { text: "Ulaanbaatar", isCorrect: true, rationale: "Ulaanbaatar is the bustling capital and largest city of Mongolia." },
+                    { text: "Tashkent", isCorrect: false, rationale: "Tashkent is the capital of Uzbekistan." },
+                    { text: "Bishkek", isCorrect: false, rationale: "Bishkek is the capital of Kyrgyzstan." }
+                ],
+                hint: "Its name means 'Red Hero' in the local language."
+            },
+            {
+                question: "What is the scientific theory that explains the origin and evolution of the universe from a single point?",
+                options: [
+                    { text: "The Theory of Relativity", isCorrect: false, rationale: "The Theory of Relativity deals with space, time, gravity, and the relationship between energy and mass." },
+                    { text: "The Steady State Theory", isCorrect: false, rationale: "This theory posits the universe is expanding but has a constant average density over time, which has been largely refuted." },
+                    { text: "The Big Bang Theory", isCorrect: true, rationale: "The Big Bang Theory is the prevailing cosmological model for the universe's initial rapid expansion." },
+                    { text: "The Multiverse Hypothesis", isCorrect: false, rationale: "This is a theoretical concept suggesting the existence of other universes, not the origin of our own." }
+                ],
+                hint: "It is often associated with the phrase 'singularity'."
+            },
+            {
+                question: "What is the official animal of Scotland?",
+                options: [
+                    { text: "Red Deer", isCorrect: false, rationale: "The Red Deer is a common symbol of the Scottish Highlands, but not the official national animal." },
+                    { text: "Unicorn", isCorrect: true, rationale: "The mythical unicorn was adopted as the national animal of Scotland in the 15th century, symbolizing purity and power." },
+                    { text: "Scottish Wildcat", isCorrect: false, rationale: "The Scottish Wildcat is an endangered native species, but lacks the mythical status of the official animal." },
+                    { text: "Highland Cow", isCorrect: false, rationale: "The Highland Cow is a well-known symbol of the Scottish landscape, but it is not the official national animal." }
+                ],
+                hint: "This creature is mythical and commonly associated with royalty."
+            },
+            {
+                question: "Which element is denoted by the chemical symbol $\\text{Sn}$ on the periodic table?",
+                options: [
+                    { text: "Sodium", isCorrect: false, rationale: "Sodium's symbol is $\\text{Na}$, from the Latin word 'natrium'." },
+                    { text: "Silver", isCorrect: false, rationale: "Silver's symbol is $\\text{Ag}$, from the Latin word 'argentum'." },
+                    { text: "Silicon", isCorrect: false, rationale: "Silicon's symbol is $\\text{Si}$." },
+                    { text: "Tin", isCorrect: true, rationale: "The symbol $\\text{Sn}$ comes from the Latin word 'stannum', which means tin." }
+                ],
+                hint: "The name of this element is derived from the Latin 'stannum'."
+            },
+            {
+                question: "What is the largest internal organ in the human body?",
+                options: [
+                    { text: "Heart", isCorrect: false, rationale: "The heart is vital, but the liver is significantly larger in mass." },
+                    { text: "Brain", isCorrect: false, rationale: "The brain is the central control organ, but not the largest by weight." },
+                    { text: "Liver", isCorrect: true, rationale: "The liver is the heaviest and largest solid organ, performing many metabolic roles." },
+                    { text: "Lungs", isCorrect: false, rationale: "The lungs take up a lot of volume but are not the heaviest organ." }
+                ],
+                hint: "This organ plays a critical role in detoxification and bile production."
+            },
+            {
+                question: "In which year did the demolition of the Berlin Wall begin, separating East and West Germany?",
+                options: [
+                    { text: "1987", isCorrect: false, rationale: "The process began shortly after this year, which is when Reagan made his famous 'Tear down this wall' speech." },
+                    { text: "1991", isCorrect: false, rationale: "German reunification had already occurred by this year." },
+                    { text: "1989", isCorrect: true, rationale: "The wall officially fell on November 9, 1989, and demolition followed shortly thereafter." },
+                    { text: "1975", isCorrect: false, rationale: "The wall was in place for over a decade after this year." }
+                ],
+                hint: "This landmark event happened two years before Germany was officially reunified."
+            },
+            {
+                question: "What is the common name for the portrait officially titled 'La Gioconda'?",
+                options: [
+                    { text: "The Last Supper", isCorrect: false, rationale: "The Last Supper is a different famous Leonardo da Vinci painting." },
+                    { text: "Mona Lisa", isCorrect: true, rationale: "The Mona Lisa is the popular name for 'La Gioconda', painted by Leonardo da Vinci." },
+                    { text: "The Creation of Adam", isCorrect: false, rationale: "This is a section of Michelangelo's ceiling fresco in the Sistine Chapel." },
+                    { text: "Girl with a Pearl Earring", isCorrect: false, rationale: "This is a painting by Johannes Vermeer." }
+                ],
+                hint: "The painting is famous for the subject's elusive smile and is housed in the Louvre Museum."
+            },
+            {
+                question: "What is the only planet in our solar system that rotates on its side?",
+                options: [
+                    { text: "Mars", isCorrect: false, rationale: "Mars has a tilt similar to Earth, giving it seasons." },
+                    { text: "Jupiter", isCorrect: false, rationale: "Jupiter has a very small axial tilt and spins vertically." },
+                    { text: "Uranus", isCorrect: true, rationale: "Uranus's axis of rotation is tilted sideways, nearly into the plane of its orbit." },
+                    { text: "Neptune", isCorrect: false, rationale: "Neptune has a substantial tilt, but not completely on its side like Uranus." }
+                ],
+                hint: "It is one of the two ice giants in the outer solar system."
+            },
+            {
+                question: "In what fictional city does the Disney film *Aladdin* primarily take place?",
+                options: [
+                    { text: "Isfahan", isCorrect: false, rationale: "Isfahan is a real city in Iran." },
+                    { text: "Agraba", isCorrect: true, rationale: "Aladdin's story is set in the fictional Sultanate of Agraba." },
+                    { text: "Babylon", isCorrect: false, rationale: "Babylon was an ancient Mesopotamian city." },
+                    { text: "Petra", isCorrect: false, rationale: "Petra is a real, ancient city in Jordan." }
+                ],
+                hint: "The name of the city sounds similar to 'Agrabah' but is spelled slightly differently in some Disney canons."
+            },
+            {
+                question: "Which river flows through the Grand Canyon?",
+                options: [
+                    { text: "Mississippi River", isCorrect: false, rationale: "The Mississippi flows through the central United States, far from the Grand Canyon." },
+                    { text: "Missouri River", isCorrect: false, rationale: "The Missouri is a tributary of the Mississippi." },
+                    { text: "Colorado River", isCorrect: true, rationale: "The powerful Colorado River carved the Grand Canyon over millions of years." },
+                    { text: "Rio Grande", isCorrect: false, rationale: "The Rio Grande forms part of the border between the US and Mexico." }
+                ],
+                hint: "The river's name shares its name with one of the US states it flows through."
+            },
+            {
+                question: "What is the smallest unit of matter?",
+                options: [
+                    { text: "Molecule", isCorrect: false, rationale: "A molecule is composed of two or more atoms." },
+                    { text: "Cell", isCorrect: false, rationale: "A cell is the smallest unit of *life*." },
+                    { text: "Atom", isCorrect: true, rationale: "The atom is traditionally considered the fundamental unit of matter that retains the properties of an element." },
+                    { text: "Proton", isCorrect: false, rationale: "Protons are subatomic particles, but the atom is the smallest unit of matter that defines an element." }
+                ],
+                hint: "This term comes from the Greek word for 'indivisible'."
+            },
+            {
+                question: "What is the only food that never spoils?",
+                options: [
+                    { text: "Dried Beans", isCorrect: false, rationale: "While dried beans last a long time, their quality degrades over decades." },
+                    { text: "Honey", isCorrect: true, rationale: "Due to its chemical composition and low water activity, properly sealed honey can remain edible indefinitely." },
+                    { text: "White Rice", isCorrect: false, rationale: "White rice can last up to 30 years if properly stored, but it is not truly immortal like honey." },
+                    { text: "Salt", isCorrect: false, rationale: "Salt is a mineral, not technically a food item, though it is used for preservation." }
+                ],
+                hint: "Archaeologists have found pots of this in ancient Egyptian tombs that are still good."
+            },
+            {
+                question: "In Greek mythology, who is the king of the gods?",
+                options: [
+                    { text: "Poseidon", isCorrect: false, rationale: "Poseidon is the God of the Sea." },
+                    { text: "Hades", isCorrect: false, rationale: "Hades is the God of the Underworld." },
+                    { text: "Ares", isCorrect: false, rationale: "Ares is the God of War." },
+                    { text: "Zeus", isCorrect: true, rationale: "Zeus is the supreme ruler of Mount Olympus and king of the gods." }
+                ],
+                hint: "His primary weapon and symbol is the lightning bolt."
+            },
+            {
+                question: "What is the highest mountain in North America?",
+                options: [
+                    { text: "Mount Logan", isCorrect: false, rationale: "Mount Logan is the highest peak in Canada, but Denali is higher." },
+                    { text: "Mount Whitney", isCorrect: false, rationale: "Mount Whitney is the highest peak in the contiguous United States, but not North America." },
+                    { text: "Pico de Orizaba", isCorrect: false, rationale: "Pico de Orizaba is the highest mountain in Mexico, but not the continent." },
+                    { text: "Denali", isCorrect: true, rationale: "Denali (formerly Mount McKinley) in Alaska is the highest peak in North America." }
+                ],
+                hint: "This peak is located in the US state of Alaska."
+            },
+            {
+                question: "In what year was the first international modern Olympiad held?",
+                options: [
+                    { text: "1896", isCorrect: true, rationale: "The first modern Olympic Games were held in Athens, Greece, in 1896." },
+                    { text: "1900", isCorrect: false, rationale: "The second modern Olympics were held in Paris in 1900." },
+                    { text: "1892", isCorrect: false, rationale: "The idea for the modern Olympics was proposed around this year, but the event was later." },
+                    { text: "1904", isCorrect: false, rationale: "The 1904 games were held in St. Louis, Missouri." }
+                ],
+                hint: "The host city for this first event was Athens."
+            },
+            {
+                question: "What is the common name for the larva of a housefly?",
+                options: [
+                    { text: "Grub", isCorrect: false, rationale: "Grub is a general term for many beetle larvae." },
+                    { text: "Maggot", isCorrect: true, rationale: "A maggot is the worm-like larva of a fly, commonly the housefly." },
+                    { text: "Caterpillar", isCorrect: false, rationale: "A caterpillar is the larva of a butterfly or moth." },
+                    { text: "Nymph", isCorrect: false, rationale: "Nymphs are the immature form of insects like dragonflies or grasshoppers." }
+                ],
+                hint: "This term is also sometimes used humorously to refer to a small, annoying child."
+            },
+            {
+                question: "What is the capital city of Brazil?",
+                options: [
+                    { text: "Rio de Janeiro", isCorrect: false, rationale: "Rio de Janeiro was the capital until 1960 and is the most well-known city." },
+                    { text: "São Paulo", isCorrect: false, rationale: "São Paulo is the largest city by population, but not the capital." },
+                    { text: "Brasília", isCorrect: true, rationale: "Brasília is the current capital, famous for its unique modernist architecture." },
+                    { text: "Salvador", isCorrect: false, rationale: "Salvador was the first capital of colonial Brazil." }
+                ],
+                hint: "This city was purpose-built in the late 1950s and officially inaugurated as the capital in 1960."
+            },
+            {
+                question: "Who was the first woman to win a Nobel Prize (in 1903)?",
+                options: [
+                    { text: "Rosalind Franklin", isCorrect: false, rationale: "Franklin was a key figure in the discovery of DNA structure but died before the Nobel Prize was awarded." },
+                    { text: "Mother Teresa", isCorrect: false, rationale: "Mother Teresa won the Nobel Peace Prize much later, in 1979." },
+                    { text: "Marie Curie", isCorrect: true, rationale: "Marie Curie was the first woman to win a Nobel Prize (Physics, 1903) and the only person to win in two different scientific fields." },
+                    { text: "Ada Lovelace", isCorrect: false, rationale: "Lovelace is considered the first computer programmer but lived in the 19th century." }
+                ],
+                hint: "She is the only person to have won the Nobel Prize in two different scientific fields."
+            },
+            {
+                question: "What does $\\text{WWW}$ stand for in a website address?",
+                options: [
+                    { text: "World Wide Widget", isCorrect: false, rationale: "This is a common humorous interpretation, but incorrect." },
+                    { text: "World Web Warehouse", isCorrect: false, rationale: "This term does not correspond to the network acronym." },
+                    { text: "Wide Web World", isCorrect: false, rationale: "The order of the words is incorrect for the widely accepted term." },
+                    { text: "World Wide Web", isCorrect: true, rationale: "WWW is a system of interlinked hypertext documents accessed via the Internet." }
+                ],
+                hint: "This system was invented by Sir Tim Berners-Lee."
+            }
+        ];
 
-        accordionItems.forEach(item => {
-            const header = item.querySelector('.accordion-header');
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answeredQuestions = new Array(quizData.length).fill(false); // To prevent re-answering
+        let userAnswers = new Array(quizData.length).fill(null); // To store selected option index
+
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const currentQuestionText = document.getElementById('currentQuestion');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const rationaleContainer = document.getElementById('rationaleContainer');
+        const questionCount = document.getElementById('questionCount');
+        const currentScore = document.getElementById('currentScore');
+        const progressBar = document.getElementById('progressBar');
+        const nextButton = document.getElementById('nextButton');
+        const finishButton = document.getElementById('finishButton');
+        const retakeButton = document.getElementById('retakeButton');
+        const finalScoreDisplay = document.getElementById('finalScoreDisplay');
+        const scoreMessage = document.getElementById('scoreMessage');
+
+        // --- Core Quiz Logic ---
+
+        function loadQuestion(index) {
+            const q = quizData[index];
+            currentQuestionText.textContent = q.question;
+            questionCount.textContent = `Question ${index + 1} of ${quizData.length}`;
             
-            header.addEventListener('click', () => {
-                // Check if the current item is already active
-                const wasActive = item.classList.contains('active');
+            // Update progress bar
+            progressBar.style.width = `${((index) / quizData.length) * 100}%`;
+
+            optionsContainer.innerHTML = '';
+            rationaleContainer.innerHTML = ''; // Clear rationale
+
+            q.options.forEach((option, optionIndex) => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = option.text;
+                button.setAttribute('data-index', optionIndex);
+
+                button.addEventListener('click', () => handleAnswer(optionIndex, option));
+
+                // If already answered, show results immediately
+                if (answeredQuestions[index]) {
+                    button.disabled = true;
+                    if (option.isCorrect) {
+                        button.classList.add('correct-answer');
+                    } else if (userAnswers[index] === optionIndex) {
+                        button.classList.add('incorrect-answer');
+                    }
+                }
                 
-                // Close all other open items
-                accordionItems.forEach(i => {
-                    i.classList.remove('active');
-                });
+                optionsContainer.appendChild(button);
+            });
+
+            // Set button state
+            if (answeredQuestions[index]) {
+                showRationale(q);
+                nextButton.disabled = false;
+            } else {
+                nextButton.disabled = true;
+            }
+
+            // Show "View Results" on the last question
+            if (index === quizData.length - 1) {
+                nextButton.style.display = 'none';
+                finishButton.style.display = 'block';
+            } else {
+                nextButton.style.display = 'block';
+                finishButton.style.display = 'none';
+            }
+        }
+
+        function handleAnswer(selectedOptionIndex, selectedOption) {
+            // Only proceed if the question hasn't been answered
+            if (answeredQuestions[currentQuestionIndex]) return;
+
+            answeredQuestions[currentQuestionIndex] = true;
+            userAnswers[currentQuestionIndex] = selectedOptionIndex;
+
+            const allOptions = optionsContainer.querySelectorAll('.option-button');
+            const currentQuestion = quizData[currentQuestionIndex];
+
+            // Update UI based on selection
+            allOptions.forEach(btn => {
+                const btnIndex = parseInt(btn.getAttribute('data-index'));
+                btn.disabled = true; // Disable all options
+
+                const optionData = currentQuestion.options[btnIndex];
                 
-                // If it wasn't active, open the clicked item
-                if (!wasActive) {
-                    item.classList.add('active');
+                if (optionData.isCorrect) {
+                    btn.classList.add('correct-answer');
+                } else if (btnIndex === selectedOptionIndex) {
+                    btn.classList.add('incorrect-answer');
                 }
             });
-        });
 
-        // --- DARK MODE TOGGLE (Placeholder functionality) ---
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                darkModeToggle.textContent = '☀️ Light Mode';
-            } else {
-                darkModeToggle.textContent = '🌑 Dark Mode';
+            // Update score
+            if (selectedOption.isCorrect) {
+                score++;
             }
-        });
-    </script>
+            currentScore.textContent = `Score: ${score}`;
+            
+            // Show rationale and enable next button
+            showRationale(currentQuestion);
+            nextButton.disabled = false;
+        }
 
+        function showRationale(q) {
+            rationaleContainer.innerHTML = '';
+            const rationaleDiv = document.createElement('div');
+            rationaleDiv.className = 'rationale mt-6';
+            
+            const correctOption = q.options.find(opt => opt.isCorrect);
+            rationaleDiv.innerHTML = `<p class="font-bold text-seekivo-primary mb-2">Hint: ${q.hint}</p>`;
+            rationaleDiv.innerHTML += `<p class="font-bold">Explanation:</p>`;
+            
+            q.options.forEach(opt => {
+                if(answeredQuestions[currentQuestionIndex] && opt.isCorrect){
+                    rationaleDiv.innerHTML += `<div class="text-sm border-t border-seekivo-light pt-2 mt-2"><span class="font-semibold text-green-700">Correct:</span> ${opt.text}. ${opt.rationale}</div>`;
+                } else if (answeredQuestions[currentQuestionIndex] && userAnswers[currentQuestionIndex] === q.options.indexOf(opt) && !opt.isCorrect) {
+                    rationaleDiv.innerHTML += `<div class="text-sm border-t border-seekivo-light pt-2 mt-2"><span class="font-semibold text-red-700">Your Choice:</span> ${opt.text}. ${opt.rationale}</div>`;
+                }
+            });
+
+            rationaleContainer.appendChild(rationaleDiv);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            }
+            // Logic for finish button handled in loadQuestion
+        }
+        
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            progressBar.style.width = `100%`;
+
+            finalScoreDisplay.textContent = `${score}/${quizData.length}`;
+
+            let message = "";
+            const percentage = (score / quizData.length) * 100;
+
+            if (percentage === 100) {
+                message = "Perfect Score! You are a true General Knowledge master!";
+            } else if (percentage >= 80) {
+                message = "Excellent job! You have a fantastic grasp of world trivia.";
+            } else if (percentage >= 50) {
+                message = "Solid effort! A great start to improving your knowledge.";
+            } else {
+                message = "Good attempt! Keep practicing, and you'll see great improvement!";
+            }
+            scoreMessage.textContent = message;
+        }
+        
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            answeredQuestions.fill(false);
+            userAnswers.fill(null);
+            currentScore.textContent = `Score: 0`;
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // --- Event Listeners ---
+        nextButton.addEventListener('click', nextQuestion);
+        finishButton.addEventListener('click', showResults);
+        retakeButton.addEventListener('click', resetQuiz);
+
+        // Initial Load
+        window.onload = () => {
+             // Dark Mode Placeholder Initialization (for consistent look)
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            darkModeToggle.addEventListener('click', function() {
+                // Placeholder for actual dark mode implementation
+                console.log('Dark mode toggled (placeholder)');
+            });
+            
+            loadQuestion(currentQuestionIndex);
+        };
+        
+    </script>
 </body>
 </html>
+
