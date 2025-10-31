@@ -51,6 +51,7 @@
             color: var(--seekivo-pink-primary);
             text-decoration: none;
         }
+        /* Desktop Navigation Container */
         .header .nav {
             display: flex;
             align-items: center;
@@ -259,24 +260,37 @@
         /* Utility for Hiding/Showing Screens */
         .hidden { display: none; }
         
-        /* Mobile adjustments */
+        /* --- MOBILE RESPONSIVENESS ADJUSTMENTS (max-width: 768px) --- */
         @media (max-width: 768px) {
+            /* Header adjustments for padding and hiding desktop nav */
             .header {
                 padding: 15px 20px;
             }
             .header .nav {
-                display: none; 
+                display: none; /* Hide standard navigation links on small screens */
             }
-            .menu-toggle {
-                display: block;
+            .header-right {
+                /* Ensure buttons/toggles are centered if only one item is present */
+                justify-content: flex-end;
+                flex-grow: 1; 
             }
+            
+            /* Main container takes full width and reduces vertical margin */
             .main-container {
                 margin: 20px 0;
+                padding: 0 10px; /* Reduced horizontal padding */
+                width: 100%;
+                max-width: 100%;
             }
+
+            /* Quiz card padding reduction */
             .quiz-card {
                 padding: 20px;
                 border-radius: 10px;
+                /* Ensure it takes full horizontal space within main-container padding */
             }
+            
+            /* Typography adjustment for smaller screens */
             .question-text {
                 font-size: 1.1em;
             }
@@ -284,6 +298,8 @@
                 padding: 12px 15px;
                 font-size: 1.0em;
             }
+
+            /* Navigation buttons stack vertically and take full width */
             .nav-buttons-container {
                 flex-direction: column;
                 gap: 10px;
@@ -291,6 +307,13 @@
             .quiz-nav-button {
                 width: 100%;
                 text-align: center;
+                /* Remove left margin from the home button placeholder, if applicable */
+                margin-left: 0 !important;
+            }
+
+            /* Adjust results screen button for full width */
+            #retakeButton {
+                 width: 100%;
             }
         }
     </style>
@@ -299,10 +322,6 @@
 
     <header class="header">
         <a href="/" class="logo">Seekivo</a>
-        <div class="header-right">
-            <!-- Dark Mode Toggle (Placeholder) -->
-           
-        </div>
         
         <!-- DESKTOP NAVIGATION -->
         <nav class="nav">
@@ -310,6 +329,11 @@
             <a href="/more-calculators.html" class="nav-link">More Calculators</a>
             <a href="/faq.html" class="nav-link">FAQ</a>
         </nav>
+        
+        <div class="header-right">
+            <!-- Dark Mode Toggle was removed here -->
+        </div>
+        
     </header>
 
     <main class="main-container">
@@ -735,13 +759,6 @@
 
         // Initial Load
         window.onload = () => {
-             // Dark Mode Placeholder Initialization (for consistent look)
-            const darkModeToggle = document.querySelector('.dark-mode-toggle');
-            darkModeToggle.addEventListener('click', function() {
-                // Placeholder for actual dark mode implementation
-                console.log('Dark mode toggled (placeholder)');
-            });
-            
             loadQuestion(currentQuestionIndex);
         };
         
