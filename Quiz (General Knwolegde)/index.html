@@ -293,17 +293,52 @@
                 text-align: center;
             }
         }
+
+         /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .content-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .content-card h1 {
+                font-size: 1.8em;
+            }
+            
+            .accordion-header {
+                padding: 15px;
+            }
+            .accordion-header h3 {
+                font-size: 1.0em;
+            }
+            .accordion-content {
+                padding: 0 15px;
+            }
+            .accordion-item.active .accordion-content {
+                padding: 0 15px 15px 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <a href="/" class="logo">Seekivo</a>
-        <div class="header-right">
-        </div>
-        
-        <!-- DESKTOP NAVIGATION -->
-        <nav class="nav">
+        <a href="https://seekivo.online/" class="logo">Seekivo</a>
+
+        <nav class="nav-mobile">
             <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
         </nav>
     </header>
@@ -744,4 +779,3 @@
     </script>
 </body>
 </html>
-
