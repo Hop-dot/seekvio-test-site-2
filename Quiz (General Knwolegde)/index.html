@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions - Seekivo</title>
+    <meta name="description" content="❓ Find quick answers about how our tools work, data accuracy, and site usage." />
+    
+    <style>
+        /* --- General Theme & Variables --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: #fcebeb; /* Light pink background */
+            color: #333;
+            min-height: 100vh;
+        }
+
+        :root {
+            --seekivo-pink-primary: #D84F8D;
+            --seekivo-pink-secondary: #FF80AB;
+            --seekivo-pink-light: #FFC1E3;
+        }
+
+        /* --- Header / Navigation Styling (Consistent Layout) --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--seekivo-pink-primary);
+        }
+        .header .nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: var(--seekivo-pink-primary);
+        }
+        .nav-link.active-page {
+            color: var(--seekivo-pink-primary);
+            border-bottom: 2px solid var(--seekivo-pink-primary);
+            padding-bottom: 5px;
+        }
+        .header-button {
+            display: inline-block;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+        .header-button:hover {
+            background-color: #e0e0e0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile Menu & Hamburger Icon */
+        .menu-toggle {
+            display: none; 
+            font-size: 1.8em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            margin-left: 15px;
+            z-index: 101;
+        }
+        #menu-check {
+            display: none; 
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Content Card Styling */
+        .content-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .content-card h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--seekivo-pink-primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--seekivo-pink-light);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        .content-card p {
+            font-size: 1.0em;
+            color: #777;
+            text-align: center;
+            margin-bottom: 30px; 
+        }
+
+        /* --- FAQ Accordion Styles --- */
+        .faq-accordion {
+            border: 1px solid var(--seekivo-pink-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--seekivo-pink-light);
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            background-color: #fcebeb; /* Light pink background for question */
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        .accordion-header:hover {
+            background-color: var(--seekivo-pink-light);
+        }
+
+        .accordion-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .accordion-icon {
+            font-size: 1.5em;
+            color: var(--seekivo-pink-primary);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-content {
+            background-color: #fff;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            color: #666;
+            line-height: 1.6;
+        }
+        .accordion-content p {
+            padding: 15px 0;
+            margin: 0;
+            text-align: left;
+        }
+        
+        /* Active State */
+        .accordion-item.active .accordion-header {
+            background-color: var(--seekivo-pink-secondary);
+        }
+        .accordion-item.active .accordion-header h3 {
+            color: white;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg); /* Change icon to X or - */
+            color: white;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 500px; /* Large enough value to cover content */
+            padding: 0 20px 20px 20px;
+        }
+
+        /* --- MOBILE RESPONSIVE STYLES (Activated below 768px) --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header .nav {
+                display: none; 
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            /* Main Content Adjustments */
+            .container {
+                margin: 20px 0;
+            }
+            .content-card {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .content-card h1 {
+                font-size: 1.8em;
+            }
+            
+            .accordion-header {
+                padding: 15px;
+            }
+            .accordion-header h3 {
+                font-size: 1.0em;
+            }
+            .accordion-content {
+                padding: 0 15px;
+            }
+            .accordion-item.active .accordion-content {
+                padding: 0 15px 15px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Seekivo</div>
+        
+        <input type="checkbox" id="menu-check">
+        
+        <div class="header-right">
+          
+            
+            <label for="menu-check" class="menu-toggle">☰</label>
+        </div>
+        
+        <nav class="nav-mobile">
+            <a href="https://seekivo.online/" class="header-button home-button">Home</a> 
+            <a href="https://seekivo.online/essential%20tools/" class="nav-link">More Calculators</a>
+        </nav>
+        
+    </header>
+
+    <main class="container">
+        <div class="content-card">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find quick answers about how our tools work, data accuracy, and site usage.</p>
+
+            <div class="faq-accordion" id="faqAccordion">
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>How do your date calculators handle Leap Years?</h3>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>All of our date-based tools (like Days Until, Age Difference, and Event Duration) automatically account for leap years (e.g., 2024, 2028). The calculations are precise to the day, ensuring accuracy regardless of the starting or ending year.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>Are your health and fitness calculators medically accurate?</h3>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Our health and fitness tools (like the Weight Loss Goal Calculator) are based on widely accepted scientific formulas (e.g., TDEE, BMR). **However, they are for informational purposes only and are not a substitute for professional medical advice.** Always consult with a doctor or certified nutritionist before starting any diet or fitness program.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>Do you store any of the dates or personal information I enter?</h3>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>No. All calculations are performed instantly on your device using client-side JavaScript. We do not store, track, or record any of the dates, times, weights, or other personal data you enter into our calculators.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>How does the Sleep Time Calculator determine the best times?</h3>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The Sleep Time Calculator uses the natural sleep cycle theory, where one cycle lasts approximately 90 minutes. The tool calculates times that allow you to wake up at the *end* of a 90-minute cycle, minimizing grogginess. It also adds an average of 14 minutes for the time it takes to fall asleep.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>What if I find a bug or have a suggestion for a new tool?</h3>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>We welcome your feedback! While we don't have a contact form on this static template yet, we encourage you to check back for updates. We are constantly improving our tools and adding new utilities based on user requests.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    
+    <script>
+        // --- ACCORDION FUNCTIONALITY ---
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            
+            header.addEventListener('click', () => {
+                // Check if the current item is already active
+                const wasActive = item.classList.contains('active');
+                
+                // Close all other open items
+                accordionItems.forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // If it wasn't active, open the clicked item
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // --- DARK MODE TOGGLE (Placeholder functionality) ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️ Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌑 Dark Mode';
+            }
+        });
+    </script>
+
+</body>
+</html>
